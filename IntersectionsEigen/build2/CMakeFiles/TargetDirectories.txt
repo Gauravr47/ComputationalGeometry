@@ -1,3 +1,0 @@
-C:/Users/gaura/OneDrive/Documents/github/ComputationalGeometry/IntersectionsEigen/build2/CMakeFiles/ALL_BUILD.dir
-C:/Users/gaura/OneDrive/Documents/github/ComputationalGeometry/IntersectionsEigen/build2/CMakeFiles/ZERO_CHECK.dir
-C:/Users/gaura/OneDrive/Documents/github/ComputationalGeometry/IntersectionsEigen/build2/src/CMakeFiles/Intersections.dir

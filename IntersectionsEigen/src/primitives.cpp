@@ -190,7 +190,27 @@ vector<ring> project(const vector3d& planeNormal, const point3d& planePoint, con
             if (f != '0') {
                 //ray trace from found to p with distance d, 
                 //intersect with shells external, if distance is  <d, then collision, do not add
-                temp.push_back(found);
+                if (temp.size() >= 2) {
+                    while (temp.size() > 2) {
+                        point3d backOne = temp.back();
+                        temp.pop_back();
+                        point3d backtwo = temp.back();
+                        if (!isCollinear(backtwo, backOne, found)) {
+                            temp.push_back(backOne);
+                            break;
+                        }
+                    }
+                    point3d backOne = temp.back();
+                    edge e{ backOne, found };
+                    edge output;
+                    bg::intersection(temp, e, output);
+                    if (output.size()<=1) {
+                        temp.push_back(found);
+                    }
+                }
+                else {
+                    temp.push_back(found);
+                }
             }
         }
         if (!temp.empty()) {
@@ -205,22 +225,18 @@ vector<ring> project(const vector3d& planeNormal, const point3d& planePoint, con
     vector<vector<double>> distances;
     for (int i = 0; i < rings.size(); i++) {
         ring temp;
-        vector<double> dist_temp;
         for (auto p : rings[i]) {
             point3d found;
             char f = segPlaneIntersectEigen(planeNormal, planePoint, p, p + 1 * lightUnitVec, found);
             if (f != '0') {
                 //ray trace from found to p with distance d, 
                 //intersect with shells external, if distance is  <d, then collision, do not add
-                float distance = (found - p).norm();
-                cout << "\n" << found << " distance " << to_string(distance);
-                temp.push_back(found);
-                dist_temp.push_back(distance);
-            }
+                    temp.push_back(found);
+                }
+ 
         }
         if (!temp.empty()) {
             projRings.push_back(temp);
-            distances.push_back(dist_temp);
         }
     }
     return projRings;

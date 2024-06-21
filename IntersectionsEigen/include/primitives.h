@@ -28,7 +28,6 @@
 using namespace std;
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
-namespace po = boost::program_options;
 
 # define M_PI           3.14159265358979323846
 static float EPSILON= 1e-10;
@@ -50,8 +49,8 @@ using polygon2d = bg::model::polygon<point2d>;
 
 BOOST_GEOMETRY_REGISTER_POINT_2D(point2d, float, cs::cartesian, x(), y())
 BOOST_GEOMETRY_REGISTER_POINT_3D(point3d, float, cs::cartesian, x(), y(), z())
-BOOST_GEOMETRY_REGISTER_LINESTRING(edge)
 BOOST_GEOMETRY_REGISTER_BOX(box, point3d, min(), max())
+BOOST_GEOMETRY_REGISTER_LINESTRING(edge)
 
 
 //template functions

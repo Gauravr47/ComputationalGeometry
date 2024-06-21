@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
 		float gamma = 90;
 		
 		if (argc == 4) {
-			fileName = argv[0];
-			alpha = stod(argv[1]);
-			gamma = stod(argv[2]);
+			fileName = argv[1];
+			alpha = stof(string(argv[2]));
+			gamma = stof(string(argv[3]));
 		}
 
 

@@ -213,7 +213,7 @@ vector<ring> project(const vector3d& planeNormal, const point3d& planePoint, con
                 //ray trace from found to p with distance d, 
                 //intersect with shells external, if distance is  <d, then collision, do not add
                 float distance = (found - p).norm();
-                cout << "\n" << found << " distance" << to_string(distance);
+                cout << "\n" << found << " distance " << to_string(distance);
                 temp.push_back(found);
                 dist_temp.push_back(distance);
             }

@@ -58,17 +58,6 @@ private:
     rtree aabbTree;
     rtree octree;
     
-    friend class boost::serialization::access;
     friend class Contour;
-    template<class Archive>
-    void serialize(Archive& ar, const unsigned int version)
-    {
-        ar& vertices;
-        ar& normals;
-        ar& faceIndices;
-        ar& shells;
-        ar& edgeFaceAdj;
-    }
-
 };
 

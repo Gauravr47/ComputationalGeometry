@@ -12,12 +12,6 @@
 #include <queue>
 #include <unordered_map>
 
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/unordered_map.hpp>
-#include <boost/serialization/set.hpp>
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/register/linestring.hpp>
@@ -26,13 +20,15 @@
 #include <boost/geometry/geometries/register/box.hpp>
 #include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/io/svg/write.hpp>
+#include <boost/program_options.hpp>
+
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 using namespace std;
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
-
+namespace po = boost::program_options;
 
 # define M_PI           3.14159265358979323846
 static float EPSILON= 1e-10;
@@ -57,66 +53,6 @@ BOOST_GEOMETRY_REGISTER_POINT_3D(point3d, float, cs::cartesian, x(), y(), z())
 BOOST_GEOMETRY_REGISTER_LINESTRING(edge)
 BOOST_GEOMETRY_REGISTER_BOX(box, point3d, min(), max())
 
-namespace boost {
-    namespace serialization {
-
-        template<   class Archive,
-            class S,
-            int Rows_,
-            int Cols_,
-            int Ops_,
-            int MaxRows_,
-            int MaxCols_>
-        inline void save(
-            Archive& ar,
-            const Eigen::Matrix<S, Rows_, Cols_, Ops_, MaxRows_, MaxCols_>& g,
-            const unsigned int version)
-        {
-            int rows = g.rows();
-            int cols = g.cols();
-
-            ar& rows;
-            ar& cols;
-            ar& boost::serialization::make_array(g.data(), rows * cols);
-        }
-
-        template<   class Archive,
-            class S,
-            int Rows_,
-            int Cols_,
-            int Ops_,
-            int MaxRows_,
-            int MaxCols_>
-        inline void load(
-            Archive& ar,
-            Eigen::Matrix<S, Rows_, Cols_, Ops_, MaxRows_, MaxCols_>& g,
-            const unsigned int version)
-        {
-            int rows, cols;
-            ar& rows;
-            ar& cols;
-            g.resize(rows, cols);
-            ar& boost::serialization::make_array(g.data(), rows * cols);
-        }
-
-        template<   class Archive,
-            class S,
-            int Rows_,
-            int Cols_,
-            int Ops_,
-            int MaxRows_,
-            int MaxCols_>
-        inline void serialize(
-            Archive& ar,
-            Eigen::Matrix<S, Rows_, Cols_, Ops_, MaxRows_, MaxCols_>& g,
-            const unsigned int version)
-        {
-            split_free(ar, g, version);
-        }
-
-
-    } // namespace serialization
-} // namespace boost
 
 //template functions
 template<typename T>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\gaura\OneDrive\Documents\github\ComputationalGeometry\IntersectionsEigen\build2\CMakeFiles\5d4ee0857e4d229ecd17ed7e240c9324\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{405E0693-FE5E-378E-B34F-642B24B94533}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -4,8 +4,25 @@
 //#include "OpenGLFunctions.h"
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
 	try {
+
+		po::options_description desc("Allowed options");
+		desc.add_options()
+			("mesh", po::value<string>(), "Input file to upload - Absolute path");
+
+		po::variables_map vm;
+		po::store(po::parse_command_line(argc, argv, desc), vm);
+		po::notify(vm);
+
+		if (vm.count("mesh")) {
+			cout << "Mesh file name is"
+				<< vm["mesh"].as<string>().c_str() << ".\n";
+		}
+		else {
+			cout << "No input mesh provided.\n";
+		}
+
 		Solid s("testFiles/cube_edge_hole.stl");
 
 		box bounds = s.getBoundingBox();

@@ -6,9 +6,9 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 	try {
-		string fileName = "testFiles/cube_hole.stl";
-		float alpha = 90;
-		float gamma = 90;
+		string fileName = "testFiles/pyramid.stl";
+		float alpha = 45;
+		float gamma = 45;
 		
 		if (argc == 4) {
 			fileName = argv[1];
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 		int i = 0;
 		for (auto& loop : projRings) {
 			for (auto const& p : loop) {
-				point3d temp = p;
+				point3d temp = trans* p;
 				if(i == 0)
 					bg::append(shadow2d.outer(), point2d{temp.x(), temp.y()});
 				else {
@@ -55,6 +55,8 @@ int main(int argc, char* argv[]) {
 		
 		string style = "fill-opacity:0.5;fill:rgb(153,204,0);stroke:rgb(153,204,0);stroke-width:2";
 		string svg_file = "shadow2d.svg";
+
+
 		create_svg(svg_file, shadow2d, style);
 
 	}

@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 		box bounds = s.getBoundingBox();
 		vector<point3d> intersections;
 		point3d planeNormal;
-		planeNormal = getPlaneNormal(90, 45);
+		planeNormal = getPlaneNormal(alpha, gamma);
 		point3d planePoint(planeNormal* -10*bounds.diagonal().norm());
 		point3d lightUnitVec;
 		lightUnitVec = -1 * planeNormal;

@@ -7,5 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED True) # Enforce C++20 standard
 include_directories(${IntersectionsEigen_SOURCE_DIR}/include) # Add include directory
 
 add_subdirectory(src)
-add_subdirectory(external)
+add_subdirectory(lib)
 add_subdirectory(testFiles)

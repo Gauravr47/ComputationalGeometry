@@ -1,4 +1,4 @@
-add_executable(Intersections main.cpp primitives.cpp)
+add_executable(Intersections main.cpp primitives.cpp solid.cpp contour.cpp)
 
 target_link_libraries(Intersections )    # Link your executable with a library
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "stack.h"
-#include "tree.h"
+#include "basic_data_structures.h"
 #include "geometry.h"
 using namespace cg;
 
@@ -106,7 +105,6 @@ namespace cg {
 	void mergeSort(T a[], int n, int(*cmp)(T, T)) {
 		mSort(a, 0, n - 1, cmp);
 	}
-
 
 	int leftToRightCmp(Point*, Point*);
 	int rightToLeftCmp(Point*, Point*);

@@ -1,6 +1,6 @@
 #include "utilFuncs.h"
 
-void reverseString(char* a[], int n)
+void cg::reverseString(char* a[], int n)
 {
 	Stack<char*> s;
 	for (int i = 0; i < n; i++) {
@@ -10,8 +10,6 @@ void reverseString(char* a[], int n)
 		a[i] = s.pop();
 	}
 }
-
-
 
 int cg::leftToRightCmp(Point* a, Point* b) {
 	if (*a < *b)return -1;

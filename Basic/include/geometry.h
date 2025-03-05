@@ -1,9 +1,10 @@
-#pragma once
+#ifndef GEOMETRY_H	
+#define GEOMETRY_H
+
 #include <limits>
 using namespace std;
-#include "node.h"
+#include "basic_data_structures.h"
 using namespace cg;
-
 
 
 namespace cg {
@@ -194,3 +195,5 @@ namespace cg {
 	bool overlappingExtent(Rectangle&, Rectangle&, int);
 	bool intersect(Rectangle&, Rectangle&);
 }
+
+#endif GEOMETRY_H

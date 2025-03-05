@@ -1,6 +1,7 @@
 #ifndef BASIC_DATA_STRUCTURES_H
 #define BASIC_DATA_STRUCTURES_H
 
+
 #include <stdlib.h>
 
 namespace cg {
@@ -18,52 +19,6 @@ namespace cg {
 		Node* remove(void);
 		void splice(Node*);
 	};
-
-	Node::Node(void) : _next(this), _prev(this) {
-
-	}
-
-	Node::~Node(void)
-	{
-	}
-
-	Node* Node::next(void)
-	{
-		return _next;
-	}
-
-	Node* Node::prev(void)
-	{
-		return _prev;
-	}
-
-	Node* Node::insert(Node* b) {
-		Node* c = _next;
-		b->_next = c;
-		b->_prev = this;
-		this->_next = b;
-		c->_prev = b;
-		return b;
-	}
-
-	Node* Node::remove(void)
-	{
-		_prev->_next = _next;
-		_next->_prev = _prev;
-		_next = _prev = this;
-		return this;
-	}
-
-	void Node::splice(Node* b)
-	{
-		Node* a = this;
-		Node* an = a->_next;
-		Node* bn = b->_next;
-		a->_next = bn;
-		b->_next = an;
-		an->_prev = b;
-		bn->_prev = a;
-	}
 
 	///////////////////////////////////////////////////////////////LIST////////////////////////////////////////
 	template<class T> class List;
@@ -111,7 +66,6 @@ namespace cg {
 		header = new ListNode<T>(nullptr);
 		win = header;
 	}
-
 
 	template<class T>
 	List<T>::~List(void) {
@@ -318,7 +272,6 @@ namespace cg {
 		if (_rchild) delete _rchild;
 	};
 
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//SearchTree Class
 	template<class T> class SearchTree {
@@ -361,7 +314,6 @@ namespace cg {
 	template<class T> int SearchTree<T>::isEmpty(void) {
 		return (root == nullptr);
 	};
-
 
 	template<class T> SearchTree<T>::~SearchTree(void) {
 		if (root) delete root;
@@ -446,7 +398,6 @@ namespace cg {
 		}
 		return;
 	}
-
 
 	template<class T> void SearchTree<T>::remove(T val) {
 		_remove(val, root);
@@ -545,7 +496,6 @@ namespace cg {
 	template<class T> BraidedNode<T>* BraidedNode<T>::prev(void) {
 		return (BraidedNode<T>*) _prev;
 	};
-
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//BraidedSearchtree Class
@@ -750,7 +700,6 @@ namespace cg {
 	{
 		return (win == root->prev()) && (root != root->next());
 	}
-
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//RandomizedNode Class
@@ -1130,7 +1079,5 @@ namespace cg {
 }
 
 #define Dictionary RandomizedSearchTree
-
-
 
 #endif // !BASIC_DATA_STRUCTURES_H

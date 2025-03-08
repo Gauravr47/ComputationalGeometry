@@ -2,6 +2,7 @@
 #include "utilFuncs.h"
 #include "basic_data_structures.h"
 #include "algorithms.h"
+#include "solid.h"
 #include <string>;
 #include <iostream>
 using namespace std;
@@ -20,7 +21,7 @@ int cmpInt(int val, int nVal) {
 }
 
 void printTree(int val) {
-	cout << "\n" << val;
+	cout << "//n" << val;
 	return;
 }
 
@@ -29,11 +30,13 @@ int cmpChar(char* val, char* nVal) {
 }
 
 int main() {
-	
-	Point s[6] = { {3,3},{8,7},{7,3},{5,9},{2,7},{5,5}};	
-	int size = 6;
-	Edge ans;
-	double closest = poly::closestPoints(s, size, ans);
-	return 0;
-
+	try {
+		string fileName = "C://Users//gaura//OneDrive//Documents//github//ComputationalGeometry//Basic//testFiles//cube_ascii.stl";
+		Solid s(fileName.c_str());
+		Triangle3D** tri = s.getTriangles();
+		List<Triangle3D*>* dep = cg::surface::depthSort(tri, s.getNumberTriangles());
+	}
+	catch (exception& e) {
+		std::cerr<<e.what();
+	}
 }

@@ -182,6 +182,16 @@ namespace cg {
 		}
 		return s;
 	}
+
+	template<class T> void ListToArray(List<T>* a, T* b) {
+		  b = new T[a->length()];
+		  a->first();
+		 for (int i = 0; i < a->length(); i++) {
+			 b[i] = a->val();
+			 a->next();
+		}
+		return ;
+	}
 	/////////////////////////////////////////////////////////////STACK////////////////////////////////////////////////
 	template<class T> class Stack {
 	private:

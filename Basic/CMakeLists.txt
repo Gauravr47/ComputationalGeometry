@@ -10,6 +10,8 @@ endif()
 include_directories(${Basics_SOURCE_DIR}/include) # Add include directory
 
 add_subdirectory(src)
+add_subdirectory(testFiles)
+
 
 
 

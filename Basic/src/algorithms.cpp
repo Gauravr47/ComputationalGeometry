@@ -88,7 +88,7 @@ Polygon* cg::project(Triangle3D& p, int h, int v)
 	if (pts[2].classify(pts[0], pts[1]) == LEFT)
 		pp->advance(CLOCKWISE);
 	pp->insert(pts[2]);
-	return nullptr;
+	return pp;
 }
 
 Polygon* cg::poly:: starPolygon(Point s[], int n) {
@@ -527,7 +527,7 @@ List<Triangle3D*>* cg::surface::depthSort(Triangle3D* tri[], int n)
 		Triangle3D* p = triSort->first();
 		Triangle3D* q = triSort->next();
 		bool hasShuffled = false;
-		for (; !triSort->isHead() && !overlapExtent(p, q, 2); q = triSort->next()) {
+		for (; !triSort->isHead() && overlapExtent(p, q, 2); q = triSort->next()) {
 			//check if there is overlap. If so then do we need to refine the list by splitting triangles of simply shuffle the list
 			if (cg::mayObscure(p, q)) {
 				if (hasShuffled || q->mark) {
@@ -592,7 +592,7 @@ bool cg::mayObscure(Triangle3D* p, Triangle3D* q) {
 	//Is p entirely behind or on the plane of q ? This is with the assumption that the triangles here 
 	// are oriented with thier normals pointing towards the center. If the convetion is that the normals
 	//are oriented away from the center like 3D printing STL files, then this check the points should classify as positive
-	for (int i = 0; i < 3; i++) {
+	for (i = 0; i < 3; i++) {
 		if ((*p)[i].classify(*q) == NEGATIVE)
 			break;
 	}
@@ -601,7 +601,7 @@ bool cg::mayObscure(Triangle3D* p, Triangle3D* q) {
 	// Is q entirely front or on the plane of p ? This is with the assumption that the triangles here 
 	// are oriented with thier normals pointing towards the center. If the convetion is that the normals
 	//are oriented away from the center like 3D printing STL files, then this check the points should classify as negative
-	for (int i = 0; i < 3; i++) {
+	for (i = 0; i < 3; i++) {
 		if ((*q)[i].classify(*p) == POSITIVE)
 			break;
 	}
@@ -999,7 +999,7 @@ List<Polygon*>* poly::regularize(Polygon& p) {
 	return poly2;
 }
 
-	void poly::semiregulaize(Polygon& p, int direction, List<Polygon*>* poly) {
+void poly::semiregulaize(Polygon& p, int direction, List<Polygon*>* poly) {
 		int (*cmp)(Vertex*, Vertex*);
 		monoSweepDirection = direction;
 		if (monoSweepDirection == LEFT_TO_RIGHT) {

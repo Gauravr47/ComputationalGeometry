@@ -1,8 +1,9 @@
 #include "solid.h"
 
-Solid::Solid():num_tri(0), tris(nullptr),_boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX),Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {};
+Solid::Solid():num_tri(0), tris(new List<Triangle3D*>),_boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX),Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {};
 
 Solid::Solid(const char* filename):_boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX), Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {
+    tris = new List<Triangle3D*>;
     if (stlFileHasASCIIFormat(filename))
         readASCIISTL(filename);
     else
@@ -22,7 +23,6 @@ void Solid::readBinarySTL(const char* filename)
     STL_READER_COND_THROW(!in, "Couldnt determine number of triangles in binary stl file " << filename);
 
     unsigned int index = 0;
-    tris = new Triangle3D * [num_tri];
     for ( int tri = 0; tri < num_tri; ++tri) {
         float d[12];
         in.read((char*)d, 12 * 4);
@@ -34,17 +34,19 @@ void Solid::readBinarySTL(const char* filename)
 
             verts[ivrt-1] = Point3D(d[ivrt * 3 + 0], d[ivrt * 3 + 1], d[ivrt * 3 + 2]);
         }
-        tris[tri] = new Triangle3D(verts[0], verts[1], verts[2], normal, tri);
-        _boundingBox.org.x = min(_boundingBox.org.x, tris[tri]->boundingBox().org.x);
-        _boundingBox.org.y = min(_boundingBox.org.y, tris[tri]->boundingBox().org.y);
-        _boundingBox.org.z = min(_boundingBox.org.z, tris[tri]->boundingBox().org.z);
-        _boundingBox.dest.x = max(_boundingBox.dest.x, tris[tri]->boundingBox().dest.x);
-        _boundingBox.dest.y = max(_boundingBox.dest.y, tris[tri]->boundingBox().dest.y);
-        _boundingBox.dest.z = max(_boundingBox.dest.z, tris[tri]->boundingBox().dest.z);
+        tris->append(new Triangle3D(verts[0], verts[1], verts[2], normal, tri));
+        tris->next();
+        _boundingBox.org.x = min(_boundingBox.org.x, tris->val()->boundingBox().org.x);
+        _boundingBox.org.y = min(_boundingBox.org.y, tris->val()->boundingBox().org.y);
+        _boundingBox.org.z = min(_boundingBox.org.z, tris->val()->boundingBox().org.z);
+        _boundingBox.dest.x = max(_boundingBox.dest.x, tris->val()->boundingBox().dest.x);
+        _boundingBox.dest.y = max(_boundingBox.dest.y, tris->val()->boundingBox().dest.y);
+        _boundingBox.dest.z = max(_boundingBox.dest.z, tris->val()->boundingBox().dest.z);
         char addData[2];
         in.read(addData, 2);
         STL_READER_COND_THROW(!in, "Error while parsing additional triangle data in binary stl file " << filename);
     }
+    tris->first();
     return;
 
 }
@@ -58,7 +60,6 @@ void Solid::readASCIISTL(const char* filename)
     vector<string> tokens;
     int lineCount = 1;
     int maxNumTokens = 0;
-    List<Triangle3D*>* triList = new List<Triangle3D*>;
 
     //temp struct
     struct Triangle {
@@ -121,7 +122,14 @@ void Solid::readASCIISTL(const char* filename)
                     "ERROR while reading from " << filename <<
                     ": bad number of vertices specified for face in line " << lineCount);
 
-                triList->append(new Triangle3D(*currT->vertices.val(), *currT->vertices.next(), *currT->vertices.next(), currT->normal, triList->length()+1));
+                tris->append(new Triangle3D(*currT->vertices.val(), *currT->vertices.next(), *currT->vertices.next(), currT->normal, tris->length()+1));
+                tris->next();
+                _boundingBox.org.x = min(_boundingBox.org.x, tris->val()->boundingBox().org.x);
+                _boundingBox.org.y = min(_boundingBox.org.y, tris->val()->boundingBox().org.y);
+                _boundingBox.org.z = min(_boundingBox.org.z, tris->val()->boundingBox().org.z);
+                _boundingBox.dest.x = max(_boundingBox.dest.x, tris->val()->boundingBox().dest.x);
+                _boundingBox.dest.y = max(_boundingBox.dest.y, tris->val()->boundingBox().dest.y);
+                _boundingBox.dest.z = max(_boundingBox.dest.z, tris->val()->boundingBox().dest.z);
                 delete currT;
             }
             else if (tok.compare("solid") == 0) {
@@ -131,21 +139,8 @@ void Solid::readASCIISTL(const char* filename)
         lineCount++;
     }
 
-    this->num_tri = triList->length();
-    this->tris = new Triangle3D*[this->num_tri];
-    triList->first();
-    for (int i = 0; i < this->num_tri; i++) {
-        tris[i] = triList->val();
-        _boundingBox.org.x = min(_boundingBox.org.x, tris[i]->boundingBox().org.x);
-        _boundingBox.org.y = min(_boundingBox.org.y, tris[i]->boundingBox().org.y);
-        _boundingBox.org.z = min(_boundingBox.org.z, tris[i]->boundingBox().org.z);
-        _boundingBox.dest.x = max(_boundingBox.dest.x, tris[i]->boundingBox().dest.x);
-        _boundingBox.dest.y = max(_boundingBox.dest.y, tris[i]->boundingBox().dest.y);
-        _boundingBox.dest.z = max(_boundingBox.dest.z, tris[i]->boundingBox().dest.z);
-        triList->next();
-    }
-    int j = 0;
-    //delete triList;
+    this->num_tri = tris->length();
+    tris->first();
     return;
 }
 
@@ -165,7 +160,7 @@ bool Solid::stlFileHasASCIIFormat(const char* filename)
         buffer.find("normal") != string::npos;
 };
 
-Triangle3D** Solid::getTriangles() {
+List<Triangle3D*>* Solid::getTriangles() {
     return tris;
 }
 

@@ -31,9 +31,9 @@ int cmpChar(char* val, char* nVal) {
 
 int main() {
 	try {
-		string fileName = "C://Users//gaura//OneDrive//Documents//github//ComputationalGeometry//Basic//testFiles//cube_ascii.stl";
+		string fileName = "C://Users//gaura//OneDrive//Documents//github//ComputationalGeometry//Basic//testFiles//Stanford_Bunny.stl";
 		Solid s(fileName.c_str());
-		Triangle3D** tri = s.getTriangles();
+		Triangle3D** tri = cg::ListToArray(s.getTriangles());
 		List<Triangle3D*>* dep = cg::surface::depthSort(tri, s.getNumberTriangles());
 	}
 	catch (exception& e) {

@@ -520,7 +520,7 @@ List<Triangle3D*>* cg::surface::depthSort(Triangle3D* tri[], int n)
 		t[i] = new Triangle3D(*tri[i]);
 	}
 	//sort based in descending z direction from far to close
-	cg::insertionSort(t, n, triangleCmp);
+	cg::mergeSort(t, n, triangleCmp);
 	List<Triangle3D*> *triSort = arrayToList(t, n);
 	delete t; //??
 	while (triSort->length() > 0) {
@@ -693,12 +693,12 @@ int cg::splitTriangleByPlane(Triangle3D* q, Triangle3D* p, Triangle3D* &q1, Tria
 		{
 			q1 = new Triangle3D(d, b, e, (*q).id);
 			q2 = new Triangle3D(a, d, e, (*q).id);
-			q2 = new Triangle3D(a, e, c, (*q).id);
+			q3 = new Triangle3D(a, e, c, (*q).id);
 		}
 		else {
 			q1 = new Triangle3D(a, d, e, (*q).id);
 			q2 = new Triangle3D(b, e, d, (*q).id);
-			q2 = new Triangle3D(c, e, b, (*q).id);
+			q3 = new Triangle3D(c, e, b, (*q).id);
 		}
 	}
 	return (numTri + 1);

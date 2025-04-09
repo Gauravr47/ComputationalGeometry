@@ -1,0 +1,66 @@
+
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+#include "utilFuncs.h"
+#include "basic_data_structures.h"
+#include "algorithms.h"
+#include "solid.h"
+#include "adts.h"
+#include <string>
+#include <iostream>
+
+
+using namespace std;
+using namespace cg;
+
+int cmpInt(int val, int nVal) {
+	if (nVal<val) {
+		return -1;
+	}
+	else if (nVal > val) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+void printTree(int val) {
+	cout << "//n" << val;
+	return;
+}
+
+int cmpChar(char* val, char* nVal) {
+	return strcmp(val, nVal);
+}
+
+int main() {
+
+	try {
+		//string fileName = "C://Users//gaura//OneDrive//Documents//github//ComputationalGeometry//Basic//testFiles//cube.stl";
+	
+		Polygon p;
+		p.insert(Point(1.0, 1.0));
+		p.insert(Point(-3.0, 5.0));
+		p.insert(Point(1.0, 8.0));
+		p.insert(Point(3.0, 5.0));
+		List<Polygon*>* obs = new List<Polygon*>();
+		//obs.insert(&p);
+		cg::Point start(0.0, 10.0);
+		cg::Point goal(10.0, 0.0);
+		Edge boundingBox(Point(-11, -11.0), Point(11.0, 11.0));
+		RRTStarTree test(start, goal, 2.0, 6.0, boundingBox,obs);
+		test.generatePath();
+		List< RRTStarNode*>* path = test.getPath();
+		delete obs;
+		
+	}
+	catch (exception& e) {
+		std::cerr<<e.what();
+	}
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetBreakAlloc(105);
+	_CrtDumpMemoryLeaks();
+}

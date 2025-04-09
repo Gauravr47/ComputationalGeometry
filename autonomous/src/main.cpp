@@ -46,11 +46,11 @@ int main() {
 		p.insert(Point(1.0, 8.0));
 		p.insert(Point(3.0, 5.0));
 		List<Polygon*>* obs = new List<Polygon*>();
-		//obs.insert(&p);
+		obs->insert(&p);
 		cg::Point start(0.0, 10.0);
 		cg::Point goal(10.0, 0.0);
 		Edge boundingBox(Point(-11, -11.0), Point(11.0, 11.0));
-		RRTStarTree test(start, goal, 2.0, 6.0, boundingBox,obs);
+		RRTStarTree test(start, goal, 0.5, 2.0, boundingBox,obs);
 		test.generatePath();
 		List< shared_ptr<RRTStarNode>>* path = test.getPath();
 		path->first();

@@ -40,7 +40,7 @@ int main() {
 		p.insert(Point(-3.0, 5.0));
 		p.insert(Point(1.0, 8.0));
 		p.insert(Point(3.0, 5.0));
-		cg::Point start(3.0, 5.0);
+		cg::Point start(0.0, 0.0);
 		bool isIn = cg::poly::pointInPolygon(start, p);
 		r = cg::poly::kernel(p);
 		for (int i = 0; i < r->size(); i++, r->advance(CLOCKWISE)) {

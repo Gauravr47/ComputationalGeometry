@@ -27,7 +27,7 @@ namespace cg {
 		for (int i = 0; i < n; i++)
 			t.insert(s[i]);
 		for (int i = 0; i < n; i++)
-			s[i] = t.removexino;
+			s[i] = t.removeMin();
 	}
 
 	template<class T>

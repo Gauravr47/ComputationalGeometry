@@ -34,7 +34,7 @@ namespace cg {
 	};
 
 	enum {
-		INSIDE, OUTSIDE, BOUNDARY
+		OUTSIDE, INSIDE, BOUNDARY
 	}; // point in polygon classification
 
 	enum {
@@ -76,6 +76,7 @@ namespace cg {
 		double polarAngle(void);
 		double length(void);
 		double distance(Edge&);
+		friend double finite(double);
 	};
 
 	double dotProduct(Point&, Point&);

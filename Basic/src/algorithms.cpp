@@ -187,12 +187,14 @@ int cg::poly::pointInPolygon(Point& a, Polygon& p) {
 	int parity = 0;
 	for (int i = 0; i < p.size(); i++) {
 		Edge e = p.edge();
-		switch (cg::poly::edgeType(a, e)) {
+		int pClass = cg::poly::edgeType(a, e);
+		switch (pClass) {
 		case TOUCHING:
 			return BOUNDARY;
 		case CROSSING:
 			parity = 1 - parity;
 		}
+		p.advance(CLOCKWISE);
 	}
 	return (parity ? INSIDE : OUTSIDE);
 }
@@ -203,9 +205,9 @@ int cg::poly::edgeType(Point& a, Edge& e) {
 
 	switch (a.classify(e)) {
 		case LEFT:
-			return ((v.y < a.y) && (a.y <= w.y)) ? TOUCHING : INESSENTIAL;
+			return ((v.y < a.y) && (a.y <= w.y)) ? CROSSING : INESSENTIAL;
 		case RIGHT:
-			return ((w.y < a.y) && (a.y <= v.y)) ? TOUCHING : INESSENTIAL;
+			return ((w.y < a.y) && (a.y <= v.y)) ? CROSSING : INESSENTIAL;
 		case BETWEEN:
 		case ORIGIN:
 		case DESTINATION:
@@ -414,6 +416,7 @@ bool cg::poly::clipPolygonToEdge(Polygon& s, Edge& e, Polygon* &result) {
 			double t;
 			e.intersect(s.edge(), t);
 			crossingPoint = e.point(t);
+			e.isVertical();
 		}
 		if (orgIsInside && destIsInside) { //if both inside, add dest
 			p->insert(dest);
@@ -511,13 +514,19 @@ Polygon* cg::poly::grahamScanHull(Point a[], int n) {
 	return p;
 }
 
-List<Triangle3D*>* cg::surface::depthSort(Triangle3D* tri[], int n)
+List<Triangle3D*>* cg::surface::depthSort(Triangle3D* tri[], int n, bool new_array)
 {
 	List<Triangle3D*> *result = new List<Triangle3D*>;
+	
 	//create a copy of triangle array
 	Triangle3D** t = new Triangle3D*[n]; 
-	for (int i = 0; i < n; i++) {
-		t[i] = new Triangle3D(*tri[i]);
+	if (new_array) {
+		for (int i = 0; i < n; i++) {
+			t[i] = new Triangle3D(*tri[i]);
+		}
+	}
+	else {
+		t = tri;
 	}
 	//sort based in descending z direction from far to close
 	cg::mergeSort(t, n, triangleCmp);
@@ -727,7 +736,7 @@ bool cg::poly::aimsAt(Edge& a, Edge& b, int aclass, int crossingType) {
 }
 
 Polygon* cg::poly::convexPolygonIntersect(Polygon& p, Polygon& q) {
-	Polygon* R;
+	Polygon* R = new Polygon();
 	int phase = 1;
 	Point intPt, startPt;
 	int iFlag = UNKNOWN;
@@ -742,9 +751,10 @@ Polygon* cg::poly::convexPolygonIntersect(Polygon& p, Polygon& q) {
 		int crossingType = crossingPoint(pEdge, qEdge, intPt);
 		if (crossingType == SKEW_CROSS) {
 			if (phase == 1) {
-				R = new Polygon();
+
 				R->insert(intPt);
 				phase = 2;
+				startPt = intPt;
 			}
 			else if (R->point() != intPt) {
 				if (intPt != startPt) {
@@ -759,27 +769,27 @@ Polygon* cg::poly::convexPolygonIntersect(Polygon& p, Polygon& q) {
 			else if (qClass == RIGHT) iFlag = Q_IS_INSIDE;
 			else iFlag = UNKNOWN;
 		}
-		else if (crossingType == COLLINEAR && pClass != BEYOND && qClass!=BEYOND) {
+		else if (crossingType == COLLINEAR && pClass != BEHIND && qClass!=BEHIND) {
 			iFlag = UNKNOWN;
 		}
 		int pAimsQ = aimsAt(pEdge,qEdge, pClass, crossingType);
 		int qAimsP = aimsAt(qEdge, pEdge, qClass, crossingType);
 		if (pAimsQ && qAimsP) {
-			if (iFlag == Q_IS_INSIDE ||(iFlag==UNKNOWN && pClass==LEFT) ) {
+			if (iFlag == Q_IS_INSIDE ||((iFlag==UNKNOWN) && (pClass==LEFT)) ) {
 				advance(p, *R, false);
 			}
 			else {
 				advance(q, *R, false);
 			}
 		}
-		else if (pAimsQ && !qAimsP) {
+		else if (pAimsQ) {
 			advance(p, *R, iFlag == P_IS_INSIDE);
 		}
-		else if (!pAimsQ && qAimsP) {
+		else if (qAimsP) {
 			advance(q, *R, iFlag == Q_IS_INSIDE);
 		}
 		else {
-			if (iFlag == Q_IS_INSIDE || (iFlag == UNKNOWN && pClass == LEFT)) {
+			if (iFlag == Q_IS_INSIDE || ((iFlag == UNKNOWN) && (pClass == LEFT))) {
 				advance(p, *R, false);
 			}
 			else {
@@ -1098,7 +1108,7 @@ void poly::monoEndTransition(Vertex* v, Dictionary<ActiveElement*>& sweepline, L
 	ActiveEdge* a = (ActiveEdge*)sweepline.locate(&ve);
 	ActiveEdge* b = (ActiveEdge*)sweepline.next();
 	ActiveEdge* c = (ActiveEdge*)sweepline.next();
-	if (!isConvex) {
+	if (!isConvex(v)) {
 		polys->append(new Polygon(v));
 	}
 	else {
@@ -1225,6 +1235,19 @@ double poly::closestPoints(Point pts[], int n, Edge &c) {
 	Point** Y = new Point* [n];
 	for (int i = 0; i < n; i++) {
 		X[i] = Y[i] = &pts[i];
+	}
+	mergeSort(X, n, leftToRightCmp);
+	mergeSort(Y, n, bottomToTopCmp);
+	return cPoints(X, Y, n, c);
+}
+
+double poly::closestPoints(List<Point*> pts, Edge& c) {
+	int n = pts.length();
+	Point** X = new Point * [n];
+	Point** Y = new Point * [n];
+	pts.first();
+	for (int i = 0; i < n; i++, pts.next()) {
+		X[i] = Y[i] = pts.val();
 	}
 	mergeSort(X, n, leftToRightCmp);
 	mergeSort(Y, n, bottomToTopCmp);

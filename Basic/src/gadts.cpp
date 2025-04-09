@@ -232,12 +232,12 @@ double ActivePoint::y() {
 /////////////////////////////////////////////////////// GRID //////////////////////////////////////////////////////////
 void Grid::_grid(double domainSize, Point s[], int n) {
 	cellSize = domainSize / m;
-	g = new List<Point*>**[m];
+	g = new List<cg::Point*>**[m];
 	for (int i = 0; i < m; i++) {
-		g[i] = new List<Point*>*[m];
+		g[i] = new List<cg::Point*>*[m];
 		for (int j = 0; j < m; j++)
 		{
-			g[i][j] = new List<Point*>;
+			g[i][j] = new List<cg::Point*>;
 		}
 	}
 	for (int i = 0; i < n; i++) {
@@ -269,15 +269,15 @@ Grid::~Grid() {
 	delete g;
 }
 
-List<Point*>* Grid::rangeQuery(Rectangle& r) {
-	List<Point*>* result = new List<Point*>;
+List<cg::Point*>* Grid::rangeQuery(Rectangle& r) {
+	List<cg::Point*>* result = new List<cg::Point*>;
 	int iLimit = int(r.ne.x / cellSize);
 	int jLimit = int(r.ne.y / cellSize);
 	for (int i = int(r.sw.x / cellSize); i < iLimit; i++) {
 		for (int j = int(r.sw.y / cellSize); j < jLimit; j++) {
-			List<Point*>* pts = g[i][j];
+			List<cg::Point*>* pts = g[i][j];
 			for (pts->first(); !pts->isHead(); pts->next()) {
-				Point* p = pts->val();
+				cg::Point* p = pts->val();
 				if (pointInRectangle(*p, r)) {
 					result->append(p);
 				}
@@ -288,14 +288,14 @@ List<Point*>* Grid::rangeQuery(Rectangle& r) {
 }
 
 /////////////////////////////////////////////////////// QUADTREE/////////////////////////////////////////////////////////
-List<Point*>* QuadTreeNode::rangeQuery(Rectangle& range, Rectangle& span) {
-	List<Point*>* result = new List<Point*>();
+List<cg::Point*>* QuadTreeNode::rangeQuery(Rectangle& range, Rectangle& span) {
+	List<cg::Point*>* result = new List<cg::Point*>();
 	if (!intersect(range, span)) {
 		return result;
 	}
 	else if (isExternal()) {
 		for (pts->first(); !pts->isHead(); pts->next()) {
-			Point* p = pts->val();
+			cg::Point* p = pts->val();
 			if (pointInRectangle(*p, range)) {
 				result->append(p);
 			}
@@ -303,7 +303,7 @@ List<Point*>* QuadTreeNode::rangeQuery(Rectangle& range, Rectangle& span) {
 	}
 	else {
 		for (int i = 0; i < 4; i++) {
-			List<Point*>* l = child[i]->rangeQuery(range, quadrant(span, i));
+			List<cg::Point*>* l = child[i]->rangeQuery(range, quadrant(span, i));
 			result->append(l);
 		}
 	}
@@ -333,7 +333,7 @@ Rectangle QuadTreeNode::quadrant(Rectangle& quad, int i) {
 	}
 }
 
-QuadTreeNode::QuadTreeNode(List<Point*>* _pts) : pts(_pts), size(pts->length()) {
+QuadTreeNode::QuadTreeNode(List<cg::Point*>* _pts) : pts(_pts), size(pts->length()) {
 	for (int i = 0; i < 4; i++) {
 		child[i] = nullptr;
 	}
@@ -363,7 +363,7 @@ QuadTreeNode::~QuadTreeNode(void) {
 QuadTreeNode* QuadTree::buildQuadTree(Grid& G, int M, int D, int level, int imin, int imax, int jmin, int jmax) {
 	if (imin == imax) {
 		QuadTreeNode* q = new QuadTreeNode(G.g[imin][imax]);
-		G.g[imin][imax] = new List<Point*>();
+		G.g[imin][imax] = new List<cg::Point*>();
 		return q;
 	}
 	else {
@@ -377,7 +377,7 @@ QuadTreeNode* QuadTree::buildQuadTree(Grid& G, int M, int D, int level, int imin
 		for (int i = 0; i < 4; i++)
 			q->size += q->child[i]->size;
 		if ((q->size <= M) || (level >= D)) {
-			q->pts = new List<Point*>;
+			q->pts = new List<cg::Point*>;
 			for (int i = 0; i < 4; i++) {
 				q->pts->append(q->child[i]->pts);
 				delete q->child[i]->pts;
@@ -396,16 +396,16 @@ QuadTree::~QuadTree() {
 	delete root;
 }
 
-List<Point*>* QuadTree::rangeQuery(Rectangle& range) {
+List<cg::Point*>* QuadTree::rangeQuery(Rectangle& range) {
 	return root->rangeQuery(range, domain);
 }
 
 ///////////////////////////////////////////////////////TWODTREE//////////////////////////////////////////////////////////
-List<Point*>* TwoDTreeNode::rangeQuery(Rectangle& range, int cutType) {
-	List<Point*>* result = new List<Point*>;
+List<cg::Point*>* TwoDTreeNode::rangeQuery(Rectangle& range, int cutType) {
+	List<cg::Point*>* result = new List<cg::Point*>;
 	if (pointInRectangle(*pnt, range))
 		result->append(pnt);
-	int (*cmp)(Point*, Point*);
+	int (*cmp)(cg::Point*, cg::Point*);
 	if (cutType == VERTICAL) {
 		cmp = leftToRightCmp;
 	}
@@ -421,7 +421,7 @@ List<Point*>* TwoDTreeNode::rangeQuery(Rectangle& range, int cutType) {
 	return result;
 }
 
-TwoDTreeNode::TwoDTreeNode(Point* p) :pnt(p), lchild(nullptr), rchild(nullptr) {
+TwoDTreeNode::TwoDTreeNode(cg::Point* p) :pnt(p), lchild(nullptr), rchild(nullptr) {
 
 }
 
@@ -431,7 +431,7 @@ TwoDTreeNode::~TwoDTreeNode() {
 	delete pnt;
 }
 
-TwoDTreeNode* TwoDTree::buildTwoDTree(Point* x[], Point* y[], int n, int cutType) {
+TwoDTreeNode* TwoDTree::buildTwoDTree(cg::Point* x[], cg::Point* y[], int n, int cutType) {
 	if (n == 0) {
 		return nullptr;
 	}
@@ -440,9 +440,9 @@ TwoDTreeNode* TwoDTree::buildTwoDTree(Point* x[], Point* y[], int n, int cutType
 	}
 	int m = n / 2;
 	TwoDTreeNode* p = new TwoDTreeNode(x[m]);
-	Point** yL = new Point * [m];
-	Point** yR = new Point * [n - m];
-	int(*cmp)(Point*, Point*);
+	cg::Point** yL = new Point * [m];
+	cg::Point** yR = new Point * [n - m];
+	int(*cmp)(cg::Point*, cg::Point*);
 	if (cutType == VERTICAL) cmp = cg::leftToRightCmp;
 	else cmp = cg::bottomToTopCmp;
 	splitPointSet(y, n, x[m], yL, yR, cmp);
@@ -454,8 +454,8 @@ TwoDTreeNode* TwoDTree::buildTwoDTree(Point* x[], Point* y[], int n, int cutType
 }
 
 TwoDTree::TwoDTree(Point p[], int n) {
-	Point** x = new Point * [n];
-	Point** y = new Point * [n];
+	cg::Point** x = new Point * [n];
+	cg::Point** y = new Point * [n];
 	for (int i = 0; i < n; i++) {
 		x[i] = y[i] = &p[i];
 	}
@@ -468,7 +468,7 @@ TwoDTree::~TwoDTree() {
 	delete root;
 }
 
-List<Point*>* TwoDTree::rangeQuery(Rectangle& range) {
+List<cg::Point*>* TwoDTree::rangeQuery(Rectangle& range) {
 	return root->rangeQuery(range, VERTICAL);
 }
 
@@ -599,3 +599,177 @@ BspTree::~BspTree() {
 List<Triangle3D*>* BspTree::visibiltySort(Point3D p) {
 	return root->visibilitySort(p);
 }
+
+/////////////////////////////////////////////////////////RTTSTARTREE//////////////////////////////////////////////////////////
+//
+//RRTStarNode::RRTStarNode(cg::Point _p, RRTStarNode* _parent, double _cost) : pnt(_p), parent(_parent), cost(_cost) {
+//}
+//
+//RRTStarNode::RRTStarNode(cg::Point _p, RRTStarNode* _parent) : pnt(_p), parent(_parent){
+//	cost = 0.0;
+//}
+//
+//RRTStarNode::RRTStarNode(cg::Point _p) : pnt(_p), parent(nullptr) {
+//	cost = 0.0;
+//}
+//
+//RRTStarNode::~RRTStarNode(void) {
+//	if (parent) delete parent;
+//}
+//
+//RRTStarNode* RRTStarTree::getRandomNode() {
+//	double x = mapBoundingBox.org.x + static_cast<double>(rand()) / RAND_MAX * (mapBoundingBox.dest.x - mapBoundingBox.org.x);
+//	double y = mapBoundingBox.org.y + static_cast<double>(rand()) / RAND_MAX * (mapBoundingBox.dest.y - mapBoundingBox.org.y);
+//	return new RRTStarNode(Point(x,y));
+//}
+//
+//RRTStarNode* RRTStarTree::getNearestNode(Point p) {
+//	RRTStarNode* nearest = nullptr;
+//	double minDist = std::numeric_limits<double>::max();
+//	nodes->first();
+//	while(!nodes->isHead()) {
+//		double dist = (nodes->val()->pnt - p).length();
+//		if (dist < minDist) {
+//			minDist = dist;
+//			nearest = nodes->val();
+//		}
+//		nodes->next();
+//	}
+//	return nearest;
+//}
+//
+//RRTStarNode* RRTStarTree::steer(RRTStarNode* nearest, RRTStarNode* random) {
+//	double theta = atan2(random->pnt.y - nearest->pnt.y, random->pnt.x - nearest->pnt.x);
+//	double newX = nearest->pnt.x + stepSize * cos(theta);
+//	double newY = nearest->pnt.y + stepSize * sin(theta);
+//	if (newX < mapBoundingBox.org.x || newX > mapBoundingBox.dest.x || newY < mapBoundingBox.org.y || newY > mapBoundingBox.dest.y) return nullptr;
+//	return new RRTStarNode(Point(newX, newY), nearest, nearest->cost + stepSize);
+//}
+//
+//List<RRTStarNode*>* RRTStarTree::findNearNodes(RRTStarNode* newNode) {
+//	List<RRTStarNode*>* neighbors = new List< RRTStarNode*>;
+//	nodes->first();
+//	while (!nodes->isHead()) {
+//		double dist = distance(nodes->val(),newNode);
+//		if (dist < searchRadius) {
+//			neighbors->insert(nodes->val());
+//		}
+//		nodes->next();
+//	}
+//	return neighbors;
+//}
+//
+//RRTStarNode* RRTStarTree::chooseBestParent(List<RRTStarNode*>* neighbors, RRTStarNode* nearest, RRTStarNode* newNode) {
+//	RRTStarNode* best = nearest;
+//	double minCost = nearest->cost + distance(nearest, newNode);
+//	neighbors->first();
+//	while (!neighbors->isHead()) {
+//		double cost = neighbors->val()->cost + distance(neighbors->val(), newNode);
+//		if (cost < minCost) {
+//			minCost = cost;
+//			best = neighbors->val();
+//		}
+//		neighbors->next();
+//	}
+//	return best;
+//}
+//
+//void RRTStarTree::rewire(List<RRTStarNode*>* neighbors, RRTStarNode* newNode) {
+//	neighbors->first();
+//	while (!neighbors->isHead()) {
+//		double newCost = newNode->cost + distance(newNode, neighbors->val());
+//		if (newCost < neighbors->val()->cost) {
+//			neighbors->val()->parent = newNode;
+//			neighbors->val()->cost = newCost;
+//		}
+//	}
+//}
+//
+//double RRTStarTree::distance(RRTStarNode* a, RRTStarNode* b) {
+//	return (a->pnt - b->pnt).length();
+//}
+//
+//RRTStarTree::RRTStarTree(cg::Point _start, cg::Point _goal, double _stepSize, double _searchRadius, cg::Edge boundingBox = Edge(Point(0,100), Point(100,100)), cg::List<cg::Polygon*>* obs = nullptr)
+//	: stepSize(_stepSize), searchRadius(_searchRadius), closestDist(std::numeric_limits<double>::max()), mapBoundingBox(boundingBox){
+//	start = new RRTStarNode(_start);
+//	goal = new RRTStarNode(_goal);
+//	closestToGoal = start;
+//	nodes = new cg::List<RRTStarNode*>();
+//	path = new cg::List<RRTStarNode*>();
+//	nodes->insert(start);
+//	iterations = 0;
+//	if (obs == nullptr) {
+//		obstacles = new List<Polygon*>();
+//	}
+//	else {
+//		obstacles = obs;
+//	}
+//}
+//
+//RRTStarTree::~RRTStarTree() {
+//	delete obstacles;
+//	delete start;
+//	delete goal;
+//	delete closestToGoal;
+//	delete nodes;
+//	delete path;
+//	
+//}
+//
+//void RRTStarTree::run(int iterations) {
+//	for (int i = 0; i < iterations; ++i) {
+//		RRTStarNode* randomNode = getRandomNode();
+//		RRTStarNode* nearest = getNearestNode(randomNode->pnt);
+//		RRTStarNode* newNode = steer(nearest, randomNode);
+//		if (newNode) {
+//			List<RRTStarNode*>* neighbors = findNearNodes(newNode);
+//			RRTStarNode* bestParent = chooseBestParent(neighbors, nearest, newNode);
+//			newNode->parent = bestParent;
+//			newNode->cost = bestParent->cost + distance(bestParent, newNode);
+//			nodes->insert(newNode);
+//			rewire(neighbors, newNode);
+//
+//			double distToGoal = distance(newNode, goal);
+//			if (distToGoal < closestDist) {
+//				closestDist = distToGoal;
+//				closestToGoal = newNode;
+//			}
+//
+//			if (goalReached(newNode)) {
+//				this->iterations = i;
+//				return;
+//			}
+//		}
+//	}
+//}
+//
+//void RRTStarTree::updateStart(Point _start) {
+//	start = new RRTStarNode(_start);
+//}
+//
+//void RRTStarTree::updateGoal(Point _goal) {
+//	goal = new RRTStarNode(_goal);
+//}
+//
+//bool RRTStarTree::generatePath() {
+//	int numRuns = 4;
+//	run(1000);
+//	while (goalReached(path->last()) && numRuns >0) {
+//		run(1000);
+//	}
+//	path->insert(closestToGoal);
+//	RRTStarNode* curr = closestToGoal;
+//	while (!nodes->isFirst()) {
+//		path->prepend(curr->parent);
+//		curr = curr->parent;
+//	}
+//	return goalReached(path->last());
+//}
+//
+//bool RRTStarTree::goalReached(RRTStarNode* node) {
+//	return distance(node, this->goal) < goalThreshold;
+//}
+//
+//cg::List< RRTStarNode*>* RRTStarTree::getPath() {
+//	return path;
+//}

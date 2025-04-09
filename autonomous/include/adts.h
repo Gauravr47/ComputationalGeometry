@@ -14,36 +14,36 @@ class RRTStarTree;
 class RRTStarNode {
 public:
 	Point pnt;
-	RRTStarNode* parent;
+	shared_ptr<RRTStarNode> parent;
 	double cost;
-	RRTStarNode(Point, RRTStarNode*, double);
-	RRTStarNode(Point, RRTStarNode*);
+	RRTStarNode(Point, shared_ptr<RRTStarNode>, double);
+	RRTStarNode(Point, shared_ptr<RRTStarNode>);
 	RRTStarNode(Point);
 	~RRTStarNode(void);
 	friend class RRTStarTree;
 };
 
 class RRTStarTree {
-	RRTStarNode *start, *goal;
+	shared_ptr<RRTStarNode> start, goal;
 	double stepSize, searchRadius;
 	const double goalThreshold = 0.5;
 	long iterations;
-	RRTStarNode* closestToGoal;
+	shared_ptr<RRTStarNode> closestToGoal;
 	double closestDist;
 	cg::Edge mapBoundingBox;
-	cg::List< RRTStarNode*>* nodes;
-	cg::List< RRTStarNode*>* path;
+	cg::List< shared_ptr<RRTStarNode>>* nodes;
+	cg::List< shared_ptr<RRTStarNode>>* path;
 	cg::List< Polygon*>* obstacles;
 
-	RRTStarNode* getRandomNode();
-	RRTStarNode* getNearestNode(Point);
-	RRTStarNode* RRTStarTree::steer(RRTStarNode*, RRTStarNode*);
-	List<RRTStarNode*>* findNearNodes(RRTStarNode*);
-	RRTStarNode* chooseBestParent(List<RRTStarNode*>*, RRTStarNode*, RRTStarNode*);
-	void rewire(List<RRTStarNode*>*, RRTStarNode*);
-	double distance(RRTStarNode*, RRTStarNode*);
-	bool goalReached(RRTStarNode* node);
-	bool isInObstacle(RRTStarNode* node);
+	shared_ptr<RRTStarNode> getRandomNode();
+	shared_ptr<RRTStarNode> getNearestNode(Point);
+	shared_ptr<RRTStarNode> RRTStarTree::steer(shared_ptr<RRTStarNode>, shared_ptr<RRTStarNode>);
+	List<shared_ptr<RRTStarNode>>* findNearNodes(shared_ptr<RRTStarNode>);
+	shared_ptr<RRTStarNode> chooseBestParent(List<shared_ptr<RRTStarNode>>*, shared_ptr<RRTStarNode>, shared_ptr<RRTStarNode>);
+	void rewire(List<shared_ptr<RRTStarNode>>*, shared_ptr<RRTStarNode>);
+	double distance(shared_ptr<RRTStarNode>, shared_ptr<RRTStarNode>);
+	bool goalReached(shared_ptr<RRTStarNode> node);
+	bool isInObstacle(shared_ptr<RRTStarNode> node);
 public:
 	RRTStarTree(Point, Point, double, double, Edge, List<Polygon*>*);
 	~RRTStarTree();
@@ -51,7 +51,7 @@ public:
 	void updateGoal(Point);
 	void run(int iterations);
 	bool generatePath();
-	cg::List< RRTStarNode*>* getPath();
+	cg::List< shared_ptr<RRTStarNode>>* getPath();
 };
 
 

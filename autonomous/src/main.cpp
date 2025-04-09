@@ -52,7 +52,12 @@ int main() {
 		Edge boundingBox(Point(-11, -11.0), Point(11.0, 11.0));
 		RRTStarTree test(start, goal, 2.0, 6.0, boundingBox,obs);
 		test.generatePath();
-		List< RRTStarNode*>* path = test.getPath();
+		List< shared_ptr<RRTStarNode>>* path = test.getPath();
+		path->first();
+		while (!path->isHead()) {
+			cout << "\n" << path->val()->pnt.x << "  " << path->val()->pnt.y;
+			path->next();
+		}
 		delete obs;
 		
 	}

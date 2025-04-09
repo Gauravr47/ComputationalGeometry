@@ -2,10 +2,10 @@
 
 ///////////////////////////////////////////////////////RTTSTARTREE//////////////////////////////////////////////////////////
 
-RRTStarNode::RRTStarNode(cg::Point _p, RRTStarNode* _parent, double _cost) : pnt(_p), parent(_parent), cost(_cost) {
+RRTStarNode::RRTStarNode(cg::Point _p, shared_ptr<RRTStarNode> _parent, double _cost) : pnt(_p), parent(move(_parent)), cost(_cost) {
 }
 
-RRTStarNode::RRTStarNode(cg::Point _p, RRTStarNode* _parent) : pnt(_p), parent(_parent){
+RRTStarNode::RRTStarNode(cg::Point _p, shared_ptr<RRTStarNode> _parent) : pnt(_p), parent(move(_parent)){
 	cost = 0.0;
 }
 
@@ -16,14 +16,14 @@ RRTStarNode::RRTStarNode(cg::Point _p) : pnt(_p), parent(nullptr) {
 RRTStarNode::~RRTStarNode(void) {
 }
 
-RRTStarNode* RRTStarTree::getRandomNode() {
+shared_ptr<RRTStarNode> RRTStarTree::getRandomNode() {
 	double x = mapBoundingBox.org.x + static_cast<double>(rand()) / RAND_MAX * (mapBoundingBox.dest.x - mapBoundingBox.org.x);
 	double y = mapBoundingBox.org.y + static_cast<double>(rand()) / RAND_MAX * (mapBoundingBox.dest.y - mapBoundingBox.org.y);
-	return new RRTStarNode(Point(x,y));
+	return make_shared<RRTStarNode>(Point(x,y));
 }
 
-RRTStarNode* RRTStarTree::getNearestNode(Point p) {
-	RRTStarNode* nearest = nullptr;
+shared_ptr<RRTStarNode> RRTStarTree::getNearestNode(Point p) {
+	shared_ptr<RRTStarNode> nearest = nullptr;
 	double minDist = std::numeric_limits<double>::max();
 	nodes->first();
 	while(!nodes->isHead()) {
@@ -37,16 +37,16 @@ RRTStarNode* RRTStarTree::getNearestNode(Point p) {
 	return nearest;
 }
 
-RRTStarNode* RRTStarTree::steer(RRTStarNode* nearest, RRTStarNode* random) {
+shared_ptr<RRTStarNode> RRTStarTree::steer(shared_ptr<RRTStarNode> nearest, shared_ptr<RRTStarNode> random) {
 	double theta = atan2(random->pnt.y - nearest->pnt.y, random->pnt.x - nearest->pnt.x);
 	double newX = nearest->pnt.x + stepSize * cos(theta);
 	double newY = nearest->pnt.y + stepSize * sin(theta);
 	if (newX < mapBoundingBox.org.x || newX > mapBoundingBox.dest.x || newY < mapBoundingBox.org.y || newY > mapBoundingBox.dest.y) return nullptr;
-	return new RRTStarNode(Point(newX, newY), nearest, nearest->cost + stepSize);
+	return make_shared<RRTStarNode>(Point(newX, newY), nearest, nearest->cost + stepSize);
 }
 
-List<RRTStarNode*>* RRTStarTree::findNearNodes(RRTStarNode* newNode) {
-	List<RRTStarNode*>* neighbors = new List< RRTStarNode*>;
+List<shared_ptr<RRTStarNode>>* RRTStarTree::findNearNodes(shared_ptr<RRTStarNode> newNode) {
+	List<shared_ptr<RRTStarNode>>* neighbors = new List< shared_ptr<RRTStarNode>>;
 	nodes->first();
 	while (!nodes->isHead()) {
 		double dist = distance(nodes->val(),newNode);
@@ -58,8 +58,8 @@ List<RRTStarNode*>* RRTStarTree::findNearNodes(RRTStarNode* newNode) {
 	return neighbors;
 }
 
-RRTStarNode* RRTStarTree::chooseBestParent(List<RRTStarNode*>* neighbors, RRTStarNode* nearest, RRTStarNode* newNode) {
-	RRTStarNode* best = nearest;
+shared_ptr<RRTStarNode> RRTStarTree::chooseBestParent(List<shared_ptr<RRTStarNode>>* neighbors, shared_ptr<RRTStarNode> nearest, shared_ptr<RRTStarNode> newNode) {
+	shared_ptr<RRTStarNode> best = nearest;
 	double minCost = nearest->cost + distance(nearest, newNode);
 	neighbors->first();
 	while (neighbors->length()>0 && !neighbors->isHead()) {
@@ -73,7 +73,7 @@ RRTStarNode* RRTStarTree::chooseBestParent(List<RRTStarNode*>* neighbors, RRTSta
 	return best;
 }
 
-void RRTStarTree::rewire(List<RRTStarNode*>* neighbors, RRTStarNode* newNode) {
+void RRTStarTree::rewire(List<shared_ptr<RRTStarNode>>* neighbors, shared_ptr<RRTStarNode> newNode) {
 	neighbors->first();
 	while (!neighbors->isHead()) {
 		double newCost = newNode->cost + distance(newNode, neighbors->val());
@@ -85,17 +85,17 @@ void RRTStarTree::rewire(List<RRTStarNode*>* neighbors, RRTStarNode* newNode) {
 	}
 }
 
-double RRTStarTree::distance(RRTStarNode* a, RRTStarNode* b) {
+double RRTStarTree::distance(shared_ptr<RRTStarNode> a, shared_ptr<RRTStarNode> b) {
 	return (a->pnt - b->pnt).length();
 }
 
 RRTStarTree::RRTStarTree(cg::Point _start, cg::Point _goal, double _stepSize, double _searchRadius, cg::Edge boundingBox = Edge(Point(0,100), Point(100,100)), cg::List<cg::Polygon*>* obs = nullptr)
 	: stepSize(_stepSize), searchRadius(_searchRadius), closestDist(std::numeric_limits<double>::max()), mapBoundingBox(boundingBox){
-	start = new RRTStarNode(_start);
-	goal = new RRTStarNode(_goal);
+	start = make_shared<RRTStarNode>(_start);
+	goal = make_shared<RRTStarNode>(_goal);
 	closestToGoal = start;
-	nodes = new cg::List<RRTStarNode*>();
-	path = new cg::List<RRTStarNode*>();
+	nodes = new cg::List<shared_ptr<RRTStarNode>>();
+	path = new cg::List<shared_ptr<RRTStarNode>>();
 	nodes->insert(start);
 	iterations = 0;
 	if (obs == nullptr) {
@@ -108,21 +108,16 @@ RRTStarTree::RRTStarTree(cg::Point _start, cg::Point _goal, double _stepSize, do
 
 RRTStarTree::~RRTStarTree() {
 	obstacles = nullptr;
-	delete start;
-	delete goal;
-	delete closestToGoal;
-	delete nodes;
-	delete path;
 	
 }
 
 void RRTStarTree::run(int iterations) {
 	for (int i = 0; i < iterations; ++i) {
-		RRTStarNode* randomNode = getRandomNode();
-		RRTStarNode* nearest = getNearestNode(randomNode->pnt);
-		RRTStarNode* newNode = steer(nearest, randomNode);
-		List<RRTStarNode*>* neighbors;
-		RRTStarNode* bestParent;
+		shared_ptr<RRTStarNode> randomNode = getRandomNode();
+		shared_ptr<RRTStarNode> nearest = getNearestNode(randomNode->pnt);
+		shared_ptr<RRTStarNode> newNode = steer(nearest, randomNode);
+		List<shared_ptr<RRTStarNode>>* neighbors;
+		shared_ptr<RRTStarNode> bestParent;
 		if (newNode && !isInObstacle(newNode)) {
 			neighbors = findNearNodes(newNode);
 			bestParent = chooseBestParent(neighbors, nearest, newNode);
@@ -147,11 +142,11 @@ void RRTStarTree::run(int iterations) {
 }
 
 void RRTStarTree::updateStart(Point _start) {
-	start = new RRTStarNode(_start);
+	start = make_shared<RRTStarNode>(_start);
 }
 
 void RRTStarTree::updateGoal(Point _goal) {
-	goal = new RRTStarNode(_goal);
+	goal = make_shared<RRTStarNode>(_goal);
 }
 
 bool RRTStarTree::generatePath() {
@@ -162,7 +157,7 @@ bool RRTStarTree::generatePath() {
 		numRuns--;
 	}
 	path->insert(closestToGoal);
-	RRTStarNode* curr = closestToGoal;
+	shared_ptr<RRTStarNode> curr = closestToGoal;
 	while (!nodes->isFirst() && curr != start) {
 		path->prepend(curr->parent);
 		curr = curr->parent;
@@ -170,15 +165,15 @@ bool RRTStarTree::generatePath() {
 	return goalReached(path->last());
 }
 
-bool RRTStarTree::goalReached(RRTStarNode* node) {
+bool RRTStarTree::goalReached(shared_ptr<RRTStarNode> node) {
 	return distance(node, this->goal) < goalThreshold;
 }
 
-cg::List< RRTStarNode*>* RRTStarTree::getPath() {
+cg::List< shared_ptr<RRTStarNode>>* RRTStarTree::getPath() {
 	return path;
 }
 
-bool  RRTStarTree::isInObstacle(RRTStarNode* node) {
+bool  RRTStarTree::isInObstacle(shared_ptr<RRTStarNode> node) {
 	Point curr = node->pnt;
 	if (obstacles->length() < 1) {
 		return false;

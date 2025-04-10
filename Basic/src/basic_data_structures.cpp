@@ -7,6 +7,7 @@ Node::Node(void) : _next(this), _prev(this) {
 
 Node::~Node(void)
 {
+
 }
 
 Node* Node::next(void)

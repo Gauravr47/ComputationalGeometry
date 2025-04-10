@@ -9,6 +9,7 @@
 #include <vector>
 #include "basic_data_structures.h"
 #include "geometry.h"
+#include <memory>
 using namespace cg;
 using namespace std;
 
@@ -35,7 +36,7 @@ public:
     //Getter - Setter
     void print();
 
-    List<Triangle3D*>* getTriangles();
+    List<shared_ptr<Triangle3D>>* getTriangles();
 
     int getNumberTriangles();
 
@@ -50,7 +51,7 @@ public:
 
     ~Solid();
 private:
-    List<Triangle3D*>* tris;
+    List<shared_ptr<Triangle3D>>* tris;
     int num_tri;
     Edge3D _boundingBox;
     friend class Polygon;

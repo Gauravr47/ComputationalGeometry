@@ -5,6 +5,7 @@
 #include "solid.h"
 #include <string>;
 #include <iostream>
+#include <memory>
 using namespace std;
 using namespace cg;
 
@@ -30,13 +31,22 @@ int cmpChar(char* val, char* nVal) {
 }
 
 int main() {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	try {
-		string fileName = "C://Users//gaura//OneDrive//Documents//github//ComputationalGeometry//Basic//testFiles//Stanford_Bunny.stl";
+		string fileName = "C://Users//gaura//OneDrive//Documents//github//ComputationalGeometry//Basic//testFiles//cube.stl";
 		Solid s(fileName.c_str());
-		Triangle3D** tri = cg::ListToArray(s.getTriangles());
-		List<Triangle3D*>* dep = cg::surface::depthSort(tri, s.getNumberTriangles());
+		List<shared_ptr<Triangle3D>> * l = s.getTriangles();
+		//List<Triangle3D*>* dep = cg::surface::depthSort(tri, s.getNumberTriangles());;
+		Polygon p;
+		p.insert(Point(4, 5));
+		p.insert(Point(5, 4));
+		p.insert(Point(5, 2));
+		p.insert(Point(4, 2));
+		Point t(3, 3);
+		bool isIn = poly::pointInConvexPolygon(t, p);
 	}
 	catch (exception& e) {
 		std::cerr<<e.what();
 	}
+	_CrtDumpMemoryLeaks();
 }

@@ -17,10 +17,10 @@ void LeftEndpoint::handleTransition(Dictionary<Edge*>& sweepLine, Dictionary<Eve
 		}
 	}
 	if (a && (b->cross(*a, t) == SKEW_CROSS)) {
-		schedule.insert(new CrossingPoint(a, b, b->point(t)));
+		schedule.insert(DBG_NEW CrossingPoint(a, b, b->point(t)));
 	}
 	if (c && (b->cross(*c, t) == SKEW_CROSS)) {
-		schedule.insert(new CrossingPoint(b, c, b->point(t)));
+		schedule.insert(DBG_NEW CrossingPoint(b, c, b->point(t)));
 	}
 }
 
@@ -33,7 +33,7 @@ void RightEndpoint::handleTransition(Dictionary<Edge*>& sweepLine, Dictionary<Ev
 	if (a && c && (a->cross(*c, t) == SKEW_CROSS)) {
 		Point pt = a->point(t);
 		if (pt.x > slCurrx) {
-			schedule.insert(new CrossingPoint(a, c, pt));
+			schedule.insert(DBG_NEW CrossingPoint(a, c, pt));
 		}
 	}
 }
@@ -47,14 +47,14 @@ void CrossingPoint::handleTransition(Dictionary<Edge*>& sweepLine, Dictionary<Ev
 	if (a && c && (a->cross(*c, t) == SKEW_CROSS)) {
 		Point pt = a->point(t);
 		if (pt.x > slCurrx) {
-			schedule.insert(new CrossingPoint(a, c, pt));
+			schedule.insert(DBG_NEW CrossingPoint(a, c, pt));
 		}
 	}
 
 	if (b && d && (b->cross(*d, t) == SKEW_CROSS)) {
 		Point pt = b->point(t);
 		if (pt.x > slCurrx) {
-			schedule.insert(new CrossingPoint(b, d, pt));
+			schedule.insert(DBG_NEW CrossingPoint(b, d, pt));
 		}
 	}
 
@@ -138,10 +138,10 @@ void AxesParallelEdge::setMin(double f) {
 }
 
 void AxesParallelEdge::handleLeftEdge(Dictionary<AxesParallelEdge*>& sweepline, List<Edge*>* segs) {
-	//insert top and bottom edges of the new rectangle
-	sweepline.insert(new AxesParallelEdge(r, TOP_SIDE));
+	//insert top and bottom edges of the DBG_NEW rectangle
+	sweepline.insert(DBG_NEW AxesParallelEdge(r, TOP_SIDE));
 	AxesParallelEdge* u = sweepline.val(); //save reference to top edge
-	sweepline.insert(new AxesParallelEdge(r, BOTTOM_SIDE));
+	sweepline.insert(DBG_NEW AxesParallelEdge(r, BOTTOM_SIDE));
 	AxesParallelEdge* l = sweepline.val(); //reference to bottom edge
 	AxesParallelEdge* p = sweepline.prev(); //reference to edge below bottom edge
 	l->count = p->count + 1;
@@ -152,19 +152,19 @@ void AxesParallelEdge::handleLeftEdge(Dictionary<AxesParallelEdge*>& sweepline, 
 		//process bottom edge
 		if ((l->type == BOTTOM_SIDE) && (l->count++ == 1)) {
 			//add the vertical line joining previous edge and current edge. Here pos will return y based on vertical edge type
-			segs->append(new Edge(Point(curx, p->pos()), Point(curx, l->pos())));
+			segs->append(DBG_NEW Edge(Point(curx, p->pos()), Point(curx, l->pos())));
 			//add the horizontal line joining previous min x cordinate of l and the currx
-			segs->append(new Edge(Point(l->min(), l->pos()), Point(curx, l->pos())));
+			segs->append(DBG_NEW Edge(Point(l->min(), l->pos()), Point(curx, l->pos())));
 		}
 		else if ((l->type == TOP_SIDE) && (l->count++ == 0)) {//process top edge
 			//add the horizontal line joining previous min x cordinate of l and the currx
-			segs->append(new Edge(Point(l->min(), l->pos()), Point(curx, l->pos())));
+			segs->append(DBG_NEW Edge(Point(l->min(), l->pos()), Point(curx, l->pos())));
 		}
 	}
 	//process top edge as l now points to it
 	if ((l->count = p->count - 1) == 0) {
 		//add the vertical line joining previous edge and current edge. Here pos will return y based on vertical edge type
-		segs->append(new Edge(Point(curx, p->pos()), Point(curx, l->pos())));
+		segs->append(DBG_NEW Edge(Point(curx, p->pos()), Point(curx, l->pos())));
 	}
 
 }
@@ -178,12 +178,12 @@ void AxesParallelEdge::handleRightEdge(Dictionary<AxesParallelEdge*>& sweepline,
 	double curx = pos();
 	//process bottom edge
 	if (l->count == 1) {
-		segs->append(new Edge(Point(l->min(), l->pos()), Point(curx, l->pos())));
+		segs->append(DBG_NEW Edge(Point(l->min(), l->pos()), Point(curx, l->pos())));
 	}
 
 	//process top edge
 	if (u->count == 0) {
-		segs->append(new Edge(Point(u->min(), u->pos()), Point(curx, u->pos())));
+		segs->append(DBG_NEW Edge(Point(u->min(), u->pos()), Point(curx, u->pos())));
 	}
 	AxesParallelEdge* initl = l; //reference to l
 	AxesParallelEdge* p = l;
@@ -192,18 +192,18 @@ void AxesParallelEdge::handleRightEdge(Dictionary<AxesParallelEdge*>& sweepline,
 		//process bottom edge
 		if ((l->type == BOTTOM_SIDE) && (--l->count == 1)) {
 			//Add vertical line from previous edge to current edge
-			segs->append(new Edge(Point(curx, p->pos()), Point(curx, l->pos())));
-			//snap the edge to a new min
+			segs->append(DBG_NEW Edge(Point(curx, p->pos()), Point(curx, l->pos())));
+			//snap the edge to a DBG_NEW min
 			l->setMin(curx);
 		}
 		else if ((l->type == TOP_SIDE) && (--l->count == 0)) {//process top edge
-			//set the new min which can be used by next bottom or top edge of the current rectangle
+			//set the DBG_NEW min which can be used by next bottom or top edge of the current rectangle
 			l->setMin(curx);
 		}
 	}
 	//remove edges from sweep lines and add vertical if needed
 	if (l->count == 0) {
-		segs->append(new Edge(Point(curx, p->pos()), Point(curx, l->pos())));
+		segs->append(DBG_NEW Edge(Point(curx, p->pos()), Point(curx, l->pos())));
 	}
 	sweepline.remove(u);
 	sweepline.remove(initl);
@@ -232,18 +232,18 @@ double ActivePoint::y() {
 /////////////////////////////////////////////////////// GRID //////////////////////////////////////////////////////////
 void Grid::_grid(double domainSize, Point s[], int n) {
 	cellSize = domainSize / m;
-	g = new List<Point*>**[m];
+	g = DBG_NEW List<Point*>**[m];
 	for (int i = 0; i < m; i++) {
-		g[i] = new List<Point*>*[m];
+		g[i] = DBG_NEW List<Point*>*[m];
 		for (int j = 0; j < m; j++)
 		{
-			g[i][j] = new List<Point*>;
+			g[i][j] = DBG_NEW List<Point*>;
 		}
 	}
 	for (int i = 0; i < n; i++) {
 		int a = int(s[i].x / cellSize);
 		int b = int(s[i].x / cellSize);
-		g[a][b]->append(new Point(s[i]));
+		g[a][b]->append(DBG_NEW Point(s[i]));
 	}
 }
 
@@ -270,7 +270,7 @@ Grid::~Grid() {
 }
 
 List<Point*>* Grid::rangeQuery(Rectangle& r) {
-	List<Point*>* result = new List<Point*>;
+	List<Point*>* result = DBG_NEW List<Point*>;
 	int iLimit = int(r.ne.x / cellSize);
 	int jLimit = int(r.ne.y / cellSize);
 	for (int i = int(r.sw.x / cellSize); i < iLimit; i++) {
@@ -289,7 +289,7 @@ List<Point*>* Grid::rangeQuery(Rectangle& r) {
 
 /////////////////////////////////////////////////////// QUADTREE/////////////////////////////////////////////////////////
 List<Point*>* QuadTreeNode::rangeQuery(Rectangle& range, Rectangle& span) {
-	List<Point*>* result = new List<Point*>();
+	List<Point*>* result = DBG_NEW List<Point*>();
 	if (!intersect(range, span)) {
 		return result;
 	}
@@ -362,12 +362,12 @@ QuadTreeNode::~QuadTreeNode(void) {
 
 QuadTreeNode* QuadTree::buildQuadTree(Grid& G, int M, int D, int level, int imin, int imax, int jmin, int jmax) {
 	if (imin == imax) {
-		QuadTreeNode* q = new QuadTreeNode(G.g[imin][imax]);
-		G.g[imin][imax] = new List<Point*>();
+		QuadTreeNode* q = DBG_NEW QuadTreeNode(G.g[imin][imax]);
+		G.g[imin][imax] = DBG_NEW List<Point*>();
 		return q;
 	}
 	else {
-		QuadTreeNode* q = new QuadTreeNode;
+		QuadTreeNode* q = DBG_NEW QuadTreeNode;
 		int imid = 0.5 * (imin + imax);
 		int jmid = 0.5 * (jmin + jmax);
 		q->child[0] = buildQuadTree(G, M, D, level + 1, imid + 1, imax, jmid + 1, jmax);
@@ -377,7 +377,7 @@ QuadTreeNode* QuadTree::buildQuadTree(Grid& G, int M, int D, int level, int imin
 		for (int i = 0; i < 4; i++)
 			q->size += q->child[i]->size;
 		if ((q->size <= M) || (level >= D)) {
-			q->pts = new List<Point*>;
+			q->pts = DBG_NEW List<Point*>;
 			for (int i = 0; i < 4; i++) {
 				q->pts->append(q->child[i]->pts);
 				delete q->child[i]->pts;
@@ -402,7 +402,7 @@ List<Point*>* QuadTree::rangeQuery(Rectangle& range) {
 
 ///////////////////////////////////////////////////////TWODTREE//////////////////////////////////////////////////////////
 List<Point*>* TwoDTreeNode::rangeQuery(Rectangle& range, int cutType) {
-	List<Point*>* result = new List<Point*>;
+	List<Point*>* result = DBG_NEW List<Point*>;
 	if (pointInRectangle(*pnt, range))
 		result->append(pnt);
 	int (*cmp)(Point*, Point*);
@@ -436,12 +436,12 @@ TwoDTreeNode* TwoDTree::buildTwoDTree(Point* x[], Point* y[], int n, int cutType
 		return nullptr;
 	}
 	if (n == 1) {
-		return new TwoDTreeNode(x[0]);
+		return DBG_NEW TwoDTreeNode(x[0]);
 	}
 	int m = n / 2;
-	TwoDTreeNode* p = new TwoDTreeNode(x[m]);
-	Point** yL = new Point * [m];
-	Point** yR = new Point * [n - m];
+	TwoDTreeNode* p = DBG_NEW TwoDTreeNode(x[m]);
+	Point** yL = DBG_NEW Point * [m];
+	Point** yR = DBG_NEW Point * [n - m];
 	int(*cmp)(Point*, Point*);
 	if (cutType == VERTICAL) cmp = cg::leftToRightCmp;
 	else cmp = cg::bottomToTopCmp;
@@ -454,8 +454,8 @@ TwoDTreeNode* TwoDTree::buildTwoDTree(Point* x[], Point* y[], int n, int cutType
 }
 
 TwoDTree::TwoDTree(Point p[], int n) {
-	Point** x = new Point * [n];
-	Point** y = new Point * [n];
+	Point** x = DBG_NEW Point * [n];
+	Point** y = DBG_NEW Point * [n];
 	for (int i = 0; i < n; i++) {
 		x[i] = y[i] = &p[i];
 	}
@@ -484,7 +484,7 @@ BspTreeNode::~BspTreeNode() {
 }
 
 List<Triangle3D*>* BspTreeNode::visibilitySort(Point3D p) {
-	List < Triangle3D*>* s = new List<Triangle3D*>;
+	List < Triangle3D*>* s = DBG_NEW List<Triangle3D*>;
 	if (p.classify(*tri) == POSITIVE) {
 		if (negChild) s->append(negChild->visibilitySort(p));
 		s->append(tri);
@@ -537,22 +537,22 @@ int cg::BspTree::splitTriangleByPlane(Triangle3D* q, Triangle3D* p, Triangle3D*&
 
 	if (numTri == 1) {
 		Point3D d = splitPoints[0];
-		q1 = new Triangle3D(d, b, c, (*q).id);
-		q2 = new Triangle3D(a, d, c, (*q).id);
+		q1 = DBG_NEW Triangle3D(d, b, c, (*q).id);
+		q2 = DBG_NEW Triangle3D(a, d, c, (*q).id);
 	}
 	else {
 		Point3D d = splitPoints[0];
 		Point3D e = splitPoints[1];
 		if (edgeIds[1] == (edgeIds[0] + 1) % 3)
 		{
-			q1 = new Triangle3D(d, b, e, (*q).id);
-			q2 = new Triangle3D(a, d, e, (*q).id);
-			q2 = new Triangle3D(a, e, c, (*q).id);
+			q1 = DBG_NEW Triangle3D(d, b, e, (*q).id);
+			q2 = DBG_NEW Triangle3D(a, d, e, (*q).id);
+			q2 = DBG_NEW Triangle3D(a, e, c, (*q).id);
 		}
 		else {
-			q1 = new Triangle3D(a, d, e, (*q).id);
-			q2 = new Triangle3D(b, e, d, (*q).id);
-			q2 = new Triangle3D(c, e, b, (*q).id);
+			q1 = DBG_NEW Triangle3D(a, d, e, (*q).id);
+			q2 = DBG_NEW Triangle3D(b, e, d, (*q).id);
+			q2 = DBG_NEW Triangle3D(c, e, b, (*q).id);
 		}
 	}
 	return (numTri + 1);
@@ -562,9 +562,9 @@ BspTreeNode* BspTree::buildBspTree(List<Triangle3D*>* s) {
 	if (s->length() == 0)
 		return nullptr;
 	if (s->length() == 1)
-		return new BspTreeNode(s->first());
-	List<Triangle3D*>* sp = new List<Triangle3D*>;
-	List<Triangle3D*>* sn = new List<Triangle3D*>;
+		return DBG_NEW BspTreeNode(s->first());
+	List<Triangle3D*>* sp = DBG_NEW List<Triangle3D*>;
+	List<Triangle3D*>* sn = DBG_NEW List<Triangle3D*>;
 	Triangle3D* p = s->first();
 	for (s->next(); !s->isHead(); s->next()) {
 		Triangle3D* q = s->val();
@@ -576,7 +576,7 @@ BspTreeNode* BspTree::buildBspTree(List<Triangle3D*>* s) {
 		else if (cl[0] != POSITIVE && cl[1] != POSITIVE && cl[2] != POSITIVE) sn->append(p);
 		else cg::BspTree::refineList(s, q);
 	}
-	BspTreeNode* n = new BspTreeNode(s->first());
+	BspTreeNode* n = DBG_NEW BspTreeNode(s->first());
 	n->posChild = buildBspTree(sp);
 	n->negChild = buildBspTree(sn);
 	delete[] sp;
@@ -585,9 +585,9 @@ BspTreeNode* BspTree::buildBspTree(List<Triangle3D*>* s) {
 }
 
 BspTree::BspTree(Triangle3D* t[], int n) {
-	List<Triangle3D*>* tris = new List<Triangle3D*>;
+	List<Triangle3D*>* tris = DBG_NEW List<Triangle3D*>;
 	for (int i = 0; i < n; i++) {
-		tris->append(new Triangle3D(*t[i]));
+		tris->append(DBG_NEW Triangle3D(*t[i]));
 	}
 	root = buildBspTree(tris);
 }

@@ -81,7 +81,7 @@ Polygon* cg::project(Triangle3D& p, int h, int v)
 		a = p[i];
 		pts[i] = Point(a[h], a[v]);
 	}
-	Polygon* pp = new Polygon;
+	Polygon* pp = DBG_NEW Polygon;
 	for (int i = 0; i < 2; i++) {
 		pp->insert(pts[i]);
 	}
@@ -92,7 +92,7 @@ Polygon* cg::project(Triangle3D& p, int h, int v)
 }
 
 Polygon* cg::poly:: starPolygon(Point s[], int n) {
-	Polygon* p = new Polygon;
+	Polygon* p = DBG_NEW Polygon;
 	p->insert(s[0]);
 	Vertex* origin = p->v();
 	cg::poly::polarCmpPoint = origin->point();
@@ -126,7 +126,7 @@ int cg::poly::polarCmp(Point* p, Point* q) {
 }
 
 Polygon* cg::poly::insertionHull(Point s[], int n) {
-	Polygon* p = new Polygon;
+	Polygon* p = DBG_NEW Polygon;
 	p->insert(s[0]);
 	hullCmpPoint = p->point();
 	for (int i = 1; i < n; i++) {
@@ -143,8 +143,8 @@ Polygon* cg::poly::insertionHull(Point s[], int n) {
 }
 
 Polygon* cg::poly::insertionHull2(Point pts[], int n) {
-	Polygon* p = new Polygon;
-	Point **s = new Point*[n];
+	Polygon* p = DBG_NEW Polygon;
+	Point **s = DBG_NEW Point*[n];
 	for (int i = 0; i < n; i++) {
 		s[i] = &pts[i];
 	}
@@ -290,12 +290,12 @@ bool cg::poly::clipLineSegment(Edge& s, Polygon& p, Edge& r) {
 }
  //clip one polygon to another one, result is polygon/s
 bool cg::poly::clipPolygon(Polygon& p, Polygon& clip, Polygon*&	result) {
-	Polygon* q = new Polygon(p); // make a pointer to the copy of og polygon to be clipped
+	Polygon* q = DBG_NEW Polygon(p); // make a pointer to the copy of og polygon to be clipped
 	Polygon* r;
 	bool flag = true;
 	for (int i = 0; i < clip.size(); i++, clip.advance(CLOCKWISE)) {
 		Edge e = clip.edge();
-		if (cg::poly::clipPolygonToEdge(*q, e, r)) { //if result is positive, delete old polygon and refer to the new result for next edge
+		if (cg::poly::clipPolygonToEdge(*q, e, r)) { //if result is positive, delete old polygon and refer to the DBG_NEW result for next edge
 			delete q;
 			q = r;
 		}
@@ -316,7 +316,7 @@ List<Polygon*>* cg::poly::triangulateMonotonePolygon(Polygon& p)
 {
 	Stack<Vertex*> s; //stack to store vertices in montone fashion in increasing x
 	Vertex* v, *vu, *vl;
-	List<Polygon*> *triangles = new List<Polygon*>;
+	List<Polygon*> *triangles = DBG_NEW List<Polygon*>;
 	leastVertex(p, leftToRightCmp); //find the leftmost vertex and set as first point
 	v = vu = vl = p.v();
 	s.push(v); //push first
@@ -403,7 +403,7 @@ void cg::poly::triangulateFanPolygon(Polygon& p, List<Polygon*>* triangles) {
 
  //clip polygon to an edge, result is polygon/s
 bool cg::poly::clipPolygonToEdge(Polygon& s, Edge& e, Polygon* &result) {
-	Polygon* p = new Polygon; //polygon to store result in temp
+	Polygon* p = DBG_NEW Polygon; //polygon to store result in temp
 	Point crossingPoint; // point to store intersection point
 	for (int i = 0; i < s.size(); i++, s.advance(CLOCKWISE)) {
 		Point org = s.point();
@@ -446,7 +446,7 @@ Polygon* cg::poly::giftWrapHull(Point a[], int n) {
 	//the leftmost point serves as sentinal point. Here the actaul array has n-1 elements. During using this
 	//algorithm make sure to have a extra element space in the input array
 	a[n] = a[l];
-	Polygon* p = new Polygon;
+	Polygon* p = DBG_NEW Polygon;
 	for (int i = 0; i < n; i++) {
 		//All points of convex hull are stored from [0,i] and rest of the points [l+1, n] may or may not belomg to hull
 		swap(a[i], a[l]);
@@ -475,7 +475,7 @@ Polygon* cg::poly::grahamScanHull(Point a[], int n) {
 	swap(a[0], a[m]);
 	polarCmpPoint = a[0];
 	//create a pointer copy array
-	Point** pts = new Point * [n];
+	Point** pts = DBG_NEW Point * [n];
 	for (i = 0; i < n; i++) {
 		pts[i] = &a[i];
 	}
@@ -503,7 +503,7 @@ Polygon* cg::poly::grahamScanHull(Point a[], int n) {
 			s.pop();
 		s.push(pts[i]);
 	}
-	Polygon* p = new Polygon;
+	Polygon* p = DBG_NEW Polygon;
 	while (!s.empty()) {
 		p->insert(*s.pop());
 	}
@@ -513,16 +513,16 @@ Polygon* cg::poly::grahamScanHull(Point a[], int n) {
 
 List<Triangle3D*>* cg::surface::depthSort(Triangle3D* tri[], int n)
 {
-	List<Triangle3D*> *result = new List<Triangle3D*>;
+	List<Triangle3D*> *result = DBG_NEW List<Triangle3D*>;
 	//create a copy of triangle array
-	Triangle3D** t = new Triangle3D*[n]; 
+	Triangle3D** t = DBG_NEW Triangle3D*[n]; 
 	for (int i = 0; i < n; i++) {
-		t[i] = new Triangle3D(*tri[i]);
+		t[i] = DBG_NEW Triangle3D(*tri[i]);
 	}
 	//sort based in descending z direction from far to close
 	cg::mergeSort(t, n, triangleCmp);
 	List<Triangle3D*> *triSort = arrayToList(t, n);
-	delete t; //??
+	delete[] t; //??
 	while (triSort->length() > 0) {
 		Triangle3D* p = triSort->first();
 		Triangle3D* q = triSort->next();
@@ -683,22 +683,22 @@ int cg::splitTriangleByPlane(Triangle3D* q, Triangle3D* p, Triangle3D* &q1, Tria
 
 	if (numTri == 1) {
 		Point3D d = splitPoints[0];
-		q1 = new Triangle3D(d,b,c, (*q).id);
-		q2 = new Triangle3D(a,d,c, (*q).id);
+		q1 = DBG_NEW Triangle3D(d,b,c, (*q).id);
+		q2 = DBG_NEW Triangle3D(a,d,c, (*q).id);
 	}
 	else {
 		Point3D d = splitPoints[0];
 		Point3D e = splitPoints[1];
 		if (edgeIds[1] == (edgeIds[0] + 1) % 3)
 		{
-			q1 = new Triangle3D(d, b, e, (*q).id);
-			q2 = new Triangle3D(a, d, e, (*q).id);
-			q3 = new Triangle3D(a, e, c, (*q).id);
+			q1 = DBG_NEW Triangle3D(d, b, e, (*q).id);
+			q2 = DBG_NEW Triangle3D(a, d, e, (*q).id);
+			q3 = DBG_NEW Triangle3D(a, e, c, (*q).id);
 		}
 		else {
-			q1 = new Triangle3D(a, d, e, (*q).id);
-			q2 = new Triangle3D(b, e, d, (*q).id);
-			q3 = new Triangle3D(c, e, b, (*q).id);
+			q1 = DBG_NEW Triangle3D(a, d, e, (*q).id);
+			q2 = DBG_NEW Triangle3D(b, e, d, (*q).id);
+			q3 = DBG_NEW Triangle3D(c, e, b, (*q).id);
 		}
 	}
 	return (numTri + 1);
@@ -742,7 +742,7 @@ Polygon* cg::poly::convexPolygonIntersect(Polygon& p, Polygon& q) {
 		int crossingType = crossingPoint(pEdge, qEdge, intPt);
 		if (crossingType == SKEW_CROSS) {
 			if (phase == 1) {
-				R = new Polygon();
+				R = DBG_NEW Polygon();
 				R->insert(intPt);
 				phase = 2;
 			}
@@ -787,9 +787,9 @@ Polygon* cg::poly::convexPolygonIntersect(Polygon& p, Polygon& q) {
 			}
 		}
 	}//for
-	if (pointInConvexPolygon(p.point(), q))return new Polygon(p);
-	else if (pointInConvexPolygon(q.point(), p))return new Polygon(q);
-	else return new Polygon();
+	if (pointInConvexPolygon(p.point(), q))return DBG_NEW Polygon(p);
+	else if (pointInConvexPolygon(q.point(), p))return DBG_NEW Polygon(q);
+	else return DBG_NEW Polygon();
 }
 
 void cg::poly::advance(Polygon& A, Polygon& R, int inside) {
@@ -823,7 +823,7 @@ int cg::poly::crossingPoint(Edge& a, Edge& b, Point& r ) {
 }
 
 List<Polygon*>* cg::poly::delaunayTriangulate(Point s[], int n) {
-	List<Polygon*>* triangles = new List<Polygon*>;
+	List<Polygon*>* triangles = DBG_NEW List<Polygon*>;
 	Dictionary<Edge*> frontier(edgeCmp);
 	Edge* e= hullEdge(s, n);
 	frontier.insert(e);
@@ -864,7 +864,7 @@ Edge* cg::poly::hullEdge(Point s[], int n) {
 			m = i;
 		}
 	}
-	return new Edge(s[0], s[m]);
+	return DBG_NEW Edge(s[0], s[m]);
 }
 
 bool cg::poly::findMate(Edge e, Point s[], int n, Point& p) {
@@ -892,7 +892,7 @@ bool cg::poly::findMate(Edge e, Point s[], int n, Point& p) {
 }
 
 Polygon* cg::poly::triangle(Point& a, Point& b, Point& c) {
-	Polygon* p = new Polygon;
+	Polygon* p = DBG_NEW Polygon;
 	p->insert(a);
 	p->insert(b);
 	p->insert(c);
@@ -900,7 +900,7 @@ Polygon* cg::poly::triangle(Point& a, Point& b, Point& c) {
 }
 
 void cg::poly::updateFrontier(Dictionary<Edge*>& frontier, Point& org, Point& dest) {
-	Edge* e = new Edge(org, dest);
+	Edge* e = DBG_NEW Edge(org, dest);
 	if (frontier.find(e)) {
 		frontier.remove(e);
 	}
@@ -913,7 +913,7 @@ void cg::poly::updateFrontier(Dictionary<Edge*>& frontier, Point& org, Point& de
 List<EventPoint*>* poly::intersectSegments(Edge edges[], int n) {
 	Dictionary<EventPoint*> schedule = buildSchedule(edges, n);
 	Dictionary<Edge*> sweepline(edgeCmp2);
-	List<EventPoint*>* result = new List<EventPoint*>;
+	List<EventPoint*>* result = DBG_NEW List<EventPoint*>;
 	while (!schedule.isEmpty()) {
 		EventPoint* ev = schedule.removeMin();
 		slCurrx = ev->p.x;
@@ -923,10 +923,10 @@ List<EventPoint*>* poly::intersectSegments(Edge edges[], int n) {
 }
 		
 Dictionary<EventPoint*>& poly::buildSchedule(Edge edges[], int n) {
-	Dictionary<EventPoint*> *schedule = new Dictionary<EventPoint*>(eventCmp);
+	Dictionary<EventPoint*> *schedule = DBG_NEW Dictionary<EventPoint*>(eventCmp);
 	for (int i = 0; i < n; i++) {
-		schedule->insert(new LeftEndpoint(&edges[i]));
-		schedule->insert(new RightEndpoint(&edges[i]));
+		schedule->insert(DBG_NEW LeftEndpoint(&edges[i]));
+		schedule->insert(DBG_NEW RightEndpoint(&edges[i]));
 	}
 	return *schedule;
 }
@@ -953,9 +953,9 @@ List<Edge*>* poly::findContour(Rectangle recs[], int n) {
 	//initialise data structures
 	AxesParallelEdge** schedule = buildSchedule(recs, n);
 	Dictionary<AxesParallelEdge*> sweepline(AxesParallelEdgeCmp);
-	List<Edge*>* segs = new List<Edge*>;
+	List<Edge*>* segs = DBG_NEW List<Edge*>;
 	Rectangle sentinal(Point(-DBL_MAX, -DBL_MAX), Point(DBL_MAX, DBL_MAX), -1);
-	sweepline.insert(new AxesParallelEdge(&sentinal, BOTTOM_SIDE));
+	sweepline.insert(DBG_NEW AxesParallelEdge(&sentinal, BOTTOM_SIDE));
 	for (int i = 0; i < 2 * n; i++) {
 		AxesParallelEdge* curr = schedule[i];
 		switch (curr->type) {
@@ -969,10 +969,10 @@ List<Edge*>* poly::findContour(Rectangle recs[], int n) {
 }
 
 AxesParallelEdge** poly::buildSchedule(Rectangle recs[], int n) {
-	AxesParallelEdge** schedule = new AxesParallelEdge* [2*n];
+	AxesParallelEdge** schedule = DBG_NEW AxesParallelEdge* [2*n];
 	for (int i = 0; i < n; i++) {
-		schedule[2 * i] = new AxesParallelEdge(&recs[i], BOTTOM_SIDE);
-		schedule[2 * i +1] = new AxesParallelEdge(&recs[i], TOP_SIDE);
+		schedule[2 * i] = DBG_NEW AxesParallelEdge(&recs[i], BOTTOM_SIDE);
+		schedule[2 * i +1] = DBG_NEW AxesParallelEdge(&recs[i], TOP_SIDE);
 	}
 	insertionSort(schedule, 2 * n, poly::AxesParallelEdgeCmp);
 	return schedule;
@@ -989,9 +989,9 @@ int poly::AxesParallelEdgeCmp(AxesParallelEdge* a, AxesParallelEdge* b) {
 }
 
 List<Polygon*>* poly::regularize(Polygon& p) {
-	List<Polygon*>* poly1 = new List<Polygon*>();
+	List<Polygon*>* poly1 = DBG_NEW List<Polygon*>();
 	semiregulaize(p, LEFT_TO_RIGHT, poly1);
-	List<Polygon*>* poly2 = new List<Polygon*>();
+	List<Polygon*>* poly2 = DBG_NEW List<Polygon*>();
 	poly1->last();
 	while (!poly1->isHead()) {
 		semiregulaize(*poly1->remove(), RIGHT_TO_LEFT, poly2);
@@ -1010,7 +1010,7 @@ void poly::semiregulaize(Polygon& p, int direction, List<Polygon*>* poly) {
 		}
 		Vertex** schedule = buildSchedule(p, cmp);
 		Dictionary<ActiveElement*> sweepLine(activeElementCmp);
-		sweepLine.insert(new ActivePoint(Point(0.0, -DBL_MAX)));
+		sweepLine.insert(DBG_NEW ActivePoint(Point(0.0, -DBL_MAX)));
 		for (int i = 0; i < p.size(); i++) {
 			Vertex* currV = schedule[i];
 			monoCurrx = currV->x;
@@ -1030,7 +1030,7 @@ void poly::semiregulaize(Polygon& p, int direction, List<Polygon*>* poly) {
 }
 
 Vertex** poly::buildSchedule(Polygon& p, int(*cmp)(Vertex*, Vertex*)) {
-	Vertex** schedule = new Vertex * [p.size()];
+	Vertex** schedule = DBG_NEW Vertex * [p.size()];
 	for (int i = 0; i < p.size(); i++, p.advance(CLOCKWISE)) {
 		schedule[i] = p.v();
 	}
@@ -1072,13 +1072,13 @@ void poly::monoStartTransition(Vertex* v, Dictionary<ActiveElement*>& sweepline)
 	Vertex* w = a->w;
 	if (!isConvex(v)) {
 		Vertex* wp = v->split(w);
-		sweepline.insert(new ActiveEdge(wp, CLOCKWISE, wp->cw()));
-		sweepline.insert(new ActiveEdge(v->ccw(), COUNTER_CLOCKWISE, v));
+		sweepline.insert(DBG_NEW ActiveEdge(wp, CLOCKWISE, wp->cw()));
+		sweepline.insert(DBG_NEW ActiveEdge(v->ccw(), COUNTER_CLOCKWISE, v));
 		a->w = (monoSweepDirection == LEFT_TO_RIGHT) ? wp->ccw() : v;
 	}
 	else {
-		sweepline.insert(new ActiveEdge(v->ccw(), COUNTER_CLOCKWISE, v));
-		sweepline.insert(new ActiveEdge(v, CLOCKWISE, v->cw()));
+		sweepline.insert(DBG_NEW ActiveEdge(v->ccw(), COUNTER_CLOCKWISE, v));
+		sweepline.insert(DBG_NEW ActiveEdge(v, CLOCKWISE, v->cw()));
 		a->w = v;
 	}
 }
@@ -1099,7 +1099,7 @@ void poly::monoEndTransition(Vertex* v, Dictionary<ActiveElement*>& sweepline, L
 	ActiveEdge* b = (ActiveEdge*)sweepline.next();
 	ActiveEdge* c = (ActiveEdge*)sweepline.next();
 	if (!isConvex) {
-		polys->append(new Polygon(v));
+		polys->append(DBG_NEW Polygon(v));
 	}
 	else {
 		((ActiveEdge*)a)->w = v;
@@ -1134,7 +1134,7 @@ Polygon* poly::halfPlaneIntersect(Edge H[], int n, Polygon& box) {
 }
 
 Polygon* poly::kernel(Polygon& p) {
-	Edge *edges = new Edge[p.size()];
+	Edge *edges = DBG_NEW Edge[p.size()];
 	for(int i = 0; i<p.size(); i++, p.advance(CLOCKWISE)){
 		edges[i] = p.edge();
 	}
@@ -1149,7 +1149,7 @@ Polygon* poly::kernel(Polygon& p) {
 }
 
 Polygon* poly::voronoiRegion(Point &p, Point s[], int n, Polygon& box) {
-	Edge* edges = new Edge[n];
+	Edge* edges = DBG_NEW Edge[n];
 	for (int i = 0; i < n; i++) {
 		edges[i] = Edge(p, s[i]);
 		edges[i].rot();
@@ -1160,7 +1160,7 @@ Polygon* poly::voronoiRegion(Point &p, Point s[], int n, Polygon& box) {
 }
 
 List<Polygon*>* poly::voronoiDiagram(Point s[], int n, Polygon &box) {
-	List<Polygon*>* r = new List<Polygon*>;
+	List<Polygon*>* r = DBG_NEW List<Polygon*>;
 	for (int i = 0; i < n; i++) {
 		Point p = s[i];
 		s[i] = s[n - 1];
@@ -1171,7 +1171,7 @@ List<Polygon*>* poly::voronoiDiagram(Point s[], int n, Polygon &box) {
 }
 
 Polygon* poly::mergeHull(Point pts[], int n) {
-	Point** p = new Point * [n];
+	Point** p = DBG_NEW Point * [n];
 	for (int i = 0; i < n; i++) {
 		p[i] = &pts[i];
 	}
@@ -1181,7 +1181,7 @@ Polygon* poly::mergeHull(Point pts[], int n) {
 
 Polygon* poly::mHull(Point* pts[], int n) {
 	if (n == 1) {
-		Polygon* q = new Polygon;
+		Polygon* q = DBG_NEW Polygon;
 		q->insert(*pts[0]);
 		return q;
 	}
@@ -1221,8 +1221,8 @@ void poly::bridge(Polygon *L, Polygon *R, Vertex *&vl, Vertex *&vr, int type) {
 }
 
 double poly::closestPoints(Point pts[], int n, Edge &c) {
-	Point** X = new Point* [n];
-	Point** Y = new Point* [n];
+	Point** X = DBG_NEW Point* [n];
+	Point** Y = DBG_NEW Point* [n];
 	for (int i = 0; i < n; i++) {
 		X[i] = Y[i] = &pts[i];
 	}
@@ -1238,8 +1238,8 @@ double poly::cPoints(Point* X[], Point* Y[], int n, Edge &c) {
 	else {
 		double delta;
 		int m = n / 2;
-		Point** YL = new Point * [m];
-		Point** YR = new Point * [n-m];
+		Point** YL = DBG_NEW Point * [m];
+		Point** YR = DBG_NEW Point * [n-m];
 		poly::splitY(Y, n, X[m], YL, YR);
 		Edge a, b;
 		double deltaL = cPoints(X, YL, m, a);
@@ -1273,7 +1273,7 @@ void poly::splitY(Point* Y[], int n, Point* p, Point* YL[], Point* YR[]) {
 
 double poly::checkStrip(Point* Y[], int n, Point *p, double delta, Edge &c) {
 	int i, striplen;
-	Point* strip = new Point[n];
+	Point* strip = DBG_NEW Point[n];
 	for (i = striplen = 0; i < n; i++) {
 		if ((p->x - delta < Y[i]->x) && (p->x + delta > Y[i]->x)) {
 			strip[striplen++] = *Y[i];
@@ -1293,7 +1293,7 @@ double poly::checkStrip(Point* Y[], int n, Point *p, double delta, Edge &c) {
 }
 
 List<Polygon*>* poly::triangulate(Polygon* p) {
-	List<Polygon*>* triangles = new List<Polygon*>;
+	List<Polygon*>* triangles = DBG_NEW List<Polygon*>;
 	if (p->size() ==3) {
 		triangles->append(p);
 	}

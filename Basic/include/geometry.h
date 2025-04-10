@@ -178,6 +178,7 @@ namespace cg {
 		Triangle3D(Point3D&, Point3D&, Point3D&, int);
 		Triangle3D(Point3D&, Point3D&, Point3D&, Point3D& n, int _id);
 		Triangle3D(void);
+		~Triangle3D(void);
 		Point3D operator[](int);
 		Edge3D boundingBox(void);
 		Point3D n(void);

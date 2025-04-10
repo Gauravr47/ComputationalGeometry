@@ -1,8 +1,16 @@
 #ifndef BASIC_DATA_STRUCTURES_H
 #define BASIC_DATA_STRUCTURES_H
 
-
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW new
+#endif
+#define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
+#include <crtdbg.h>
 
 namespace cg {
 
@@ -63,7 +71,7 @@ namespace cg {
 	template<class T>
 	List<T>::List(void) : _length(0)
 	{
-		header = new ListNode<T>(nullptr);
+		header = DBG_NEW ListNode<T>(nullptr);
 		win = header;
 	}
 
@@ -78,21 +86,21 @@ namespace cg {
 
 	template<class T>
 	T List<T>::insert(T val) {
-		win->insert(new ListNode<T>(val));
+		win->insert(DBG_NEW ListNode<T>(val));
 		++_length;
 		return val;
 	}
 
 	template<class T>
 	T List<T>::prepend(T val) {
-		header->insert(new ListNode<T>(val));
+		header->insert(DBG_NEW ListNode<T>(val));
 		++_length;
 		return val;
 	}
 
 	template<class T>
 	T List<T>::append(T val) {
-		header->prev()->insert(new ListNode<T>(val));
+		header->prev()->insert(DBG_NEW ListNode<T>(val));
 		++_length;
 		return val;
 	}
@@ -115,7 +123,8 @@ namespace cg {
 		}
 		T val = win->_val;
 		win = (ListNode<T>*) win->prev();
-		delete (ListNode<T>*) win->next()->remove();
+		auto temp = win->next()->remove();
+		delete temp;
 		--_length;
 		return val;
 	}
@@ -176,7 +185,7 @@ namespace cg {
 	}
 
 	template<class T> List<T>* arrayToList(T a[], int n) {
-		List<T>* s = new List<T>;
+		List<T>* s = DBG_NEW List<T>;
 		for (int i = 0; i < n; i++) {
 			s->append(a[i]);
 		}
@@ -184,7 +193,7 @@ namespace cg {
 	}
 
 	template<class T> T* ListToArray(List<T>* a) {
-		  T* b = new T[a->length()];
+		  T* b = DBG_NEW T[a->length()];
 		  a->first();
 		 for (int i = 0; i < a->length(); i++) {
 			 b[i] = a->val();
@@ -209,7 +218,7 @@ namespace cg {
 	};
 
 	template<class T>
-	Stack<T>::Stack(void) : s(new List<T>) {
+	Stack<T>::Stack(void) : s(DBG_NEW List<T>) {
 
 	}
 
@@ -375,7 +384,7 @@ namespace cg {
 
 	template<class T> void SearchTree<T>::insert(T val) {
 		if (root == nullptr) {
-			root = new TreeNode<T>(val);
+			root = DBG_NEW TreeNode<T>(val);
 			return;
 		}
 		int result;
@@ -401,10 +410,10 @@ namespace cg {
 			}
 		}
 		if (result < 0) {
-			n->_lchild = new TreeNode<T>(val);
+			n->_lchild = DBG_NEW TreeNode<T>(val);
 		}
 		else {
-			n->_rchild = new TreeNode<T>(val);
+			n->_rchild = DBG_NEW TreeNode<T>(val);
 		}
 		return;
 	}
@@ -573,7 +582,7 @@ namespace cg {
 	template<class T>
 	BraidedSearchTree<T>::BraidedSearchTree(int(*c)(T, T)) : cmp(c)
 	{
-		win = root = new BraidedNode<T>(nullptr);
+		win = root = DBG_NEW BraidedNode<T>(nullptr);
 	}
 
 	template<class T>
@@ -648,7 +657,7 @@ namespace cg {
 				return nullptr;
 			}
 		}
-		win = new BraidedNode<T>(val);
+		win = DBG_NEW BraidedNode<T>(val);
 		if (result < 0) {
 			p->_lchild = win;
 			p->prev()->Node::insert(win);
@@ -892,7 +901,7 @@ namespace cg {
 
 	template<class T>
 	RandomizedSearchTree<T>::RandomizedSearchTree(int(*c)(T, T), int seed) :cmp(c) {
-		root = win = new RandomizedNode<T>(nullptr, seed);
+		root = win = DBG_NEW RandomizedNode<T>(nullptr, seed);
 		root->_priority = -1.0;
 	};
 
@@ -1017,7 +1026,7 @@ namespace cg {
 				return nullptr;
 			}
 		}
-		win = new RandomizedNode<T>(val);
+		win = DBG_NEW RandomizedNode<T>(val);
 		win->_parent = p;
 		if (result < 0) {
 			p->_lchild = win;

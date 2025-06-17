@@ -28,7 +28,7 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
-[Bb]uild/
+[Bb]uild*/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
@@ -402,3 +402,7 @@ FodyWeavers.xsd
 *.sln
 *.vcxproj
 *.vcxproj.user
+
+#ignore temp folders
+Basic/testFiles/
+autonomous/

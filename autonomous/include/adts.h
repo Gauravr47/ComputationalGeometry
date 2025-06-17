@@ -1,6 +1,18 @@
 #ifndef ADTS_H
 #define ADTS_H
 
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW new
+#endif
+
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+
 #include "basic_data_structures.h"
 #include "geometry.h"
 #include "utilFuncs.h"
@@ -33,7 +45,7 @@ class RRTStarTree {
 	cg::Edge mapBoundingBox;
 	cg::List< shared_ptr<RRTStarNode>>* nodes;
 	cg::List< shared_ptr<RRTStarNode>>* path;
-	cg::List< Polygon*>* obstacles;
+	cg::List<shared_ptr<Polygon>>* obstacles;
 
 	shared_ptr<RRTStarNode> getRandomNode();
 	shared_ptr<RRTStarNode> getNearestNode(Point);
@@ -45,7 +57,7 @@ class RRTStarTree {
 	bool goalReached(shared_ptr<RRTStarNode> node);
 	bool isInObstacle(shared_ptr<RRTStarNode> node);
 public:
-	RRTStarTree(Point, Point, double, double, Edge, List<Polygon*>*);
+	RRTStarTree(Point, Point, double, double, Edge, List<shared_ptr<Polygon>>*);
 	~RRTStarTree();
 	void updateStart(Point);
 	void updateGoal(Point);

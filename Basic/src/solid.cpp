@@ -1,9 +1,9 @@
 #include "solid.h"
 
-Solid::Solid():num_tri(0), tris(DBG_NEW List<shared_ptr<Triangle3D>>),_boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX),Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {};
+Solid::Solid() :num_tri(0), tris(new List<Triangle3D*>), _boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX), Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {};
 
-Solid::Solid(const char* filename):_boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX), Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {
-    tris = DBG_NEW List<shared_ptr<Triangle3D>>;
+Solid::Solid(const char* filename) :_boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX), Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {
+    tris = new List<Triangle3D*>;
     if (stlFileHasASCIIFormat(filename))
         readASCIISTL(filename);
     else
@@ -23,7 +23,7 @@ void Solid::readBinarySTL(const char* filename)
     STL_READER_COND_THROW(!in, "Couldnt determine number of triangles in binary stl file " << filename);
 
     unsigned int index = 0;
-    for ( int tri = 0; tri < num_tri; ++tri) {
+    for (int tri = 0; tri < num_tri; ++tri) {
         float d[12];
         in.read((char*)d, 12 * 4);
         STL_READER_COND_THROW(!in, "Error while parsing trianlge in binary stl file " << filename);
@@ -32,9 +32,9 @@ void Solid::readBinarySTL(const char* filename)
         Point3D verts[3];
         for (size_t ivrt = 1; ivrt < 4; ++ivrt) {
 
-            verts[ivrt-1] = Point3D(d[ivrt * 3 + 0], d[ivrt * 3 + 1], d[ivrt * 3 + 2]);
+            verts[ivrt - 1] = Point3D(d[ivrt * 3 + 0], d[ivrt * 3 + 1], d[ivrt * 3 + 2]);
         }
-        tris->append(make_shared<Triangle3D>( Triangle3D(verts[0], verts[1], verts[2], normal, tri)));
+        tris->append(new Triangle3D(verts[0], verts[1], verts[2], normal, tri));
         tris->next();
         _boundingBox.org.x = min(_boundingBox.org.x, tris->val()->boundingBox().org.x);
         _boundingBox.org.y = min(_boundingBox.org.y, tris->val()->boundingBox().org.y);
@@ -63,7 +63,7 @@ void Solid::readASCIISTL(const char* filename)
 
     //temp struct
     struct Triangle {
-        List<shared_ptr<Point3D>> vertices;
+        List<Point3D*> vertices;
         Point3D normal;
     };
     Triangle* currT;
@@ -94,7 +94,8 @@ void Solid::readASCIISTL(const char* filename)
                 }
 
                 //  read the position
-                currT->vertices.append(make_shared<Point3D>(Point3D(atof(tokens[1].c_str()), atof(tokens[2].c_str()), atof(tokens[3].c_str()))));
+                Point3D* v = new Point3D(atof(tokens[1].c_str()), atof(tokens[2].c_str()), atof(tokens[3].c_str()));
+                currT->vertices.append(v);
             }
             else if (tok.compare("facet") == 0)
             {
@@ -107,9 +108,9 @@ void Solid::readASCIISTL(const char* filename)
                     ": Missing normal specifier in line " << lineCount);
 
                 //  read the normal
-                currT = DBG_NEW Triangle;
+                currT = new Triangle;
                 currT->normal = Point3D(atof(tokens[2].c_str()), atof(tokens[3].c_str()), atof(tokens[4].c_str()));
-                
+
             }
             else if (tok.compare("outer") == 0) {
                 STL_READER_COND_THROW((tokenCount < 2) || (tokens[1].compare("loop") != 0),
@@ -121,7 +122,7 @@ void Solid::readASCIISTL(const char* filename)
                     "ERROR while reading from " << filename <<
                     ": bad number of vertices specified for face in line " << lineCount);
 
-                tris->append(make_shared<Triangle3D>(Triangle3D(*currT->vertices.val(), *currT->vertices.next(), *currT->vertices.next(), currT->normal, tris->length()+1)));
+                tris->append(new Triangle3D(*currT->vertices.val(), *currT->vertices.next(), *currT->vertices.next(), currT->normal, tris->length() + 1));
                 tris->next();
                 _boundingBox.org.x = min(_boundingBox.org.x, tris->val()->boundingBox().org.x);
                 _boundingBox.org.y = min(_boundingBox.org.y, tris->val()->boundingBox().org.y);
@@ -160,7 +161,7 @@ bool Solid::stlFileHasASCIIFormat(const char* filename)
         buffer.find("normal") != string::npos;
 };
 
-List<shared_ptr<Triangle3D>>* Solid::getTriangles() {
+List<Triangle3D*>* Solid::getTriangles() {
     return tris;
 }
 
@@ -174,4 +175,3 @@ int Solid::getNumberTriangles() {
 
 Solid::~Solid() {
     delete tris;
-}

@@ -36,7 +36,7 @@ public:
     //Getter - Setter
     void print();
 
-    List<shared_ptr<Triangle3D>>* getTriangles();
+    List<Triangle3D*>* getTriangles();
 
     int getNumberTriangles();
 
@@ -51,7 +51,7 @@ public:
 
     ~Solid();
 private:
-    List<shared_ptr<Triangle3D>>* tris;
+    List<Triangle3D*>* tris;
     int num_tri;
     Edge3D _boundingBox;
     friend class Polygon;

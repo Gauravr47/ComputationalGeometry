@@ -2,8 +2,10 @@
 #include "utilFuncs.h"
 #include "basic_data_structures.h"
 #include "algorithms.h"
+#include "solid.h"
 #include <string>;
 #include <iostream>
+#include <memory>
 using namespace std;
 using namespace cg;
 
@@ -20,7 +22,7 @@ int cmpInt(int val, int nVal) {
 }
 
 void printTree(int val) {
-	cout << "\n" << val;
+	cout << "//n" << val;
 	return;
 }
 
@@ -29,11 +31,22 @@ int cmpChar(char* val, char* nVal) {
 }
 
 int main() {
-	
-	Point s[6] = { {3,3},{8,7},{7,3},{5,9},{2,7},{5,5}};	
-	int size = 6;
-	Edge ans;
-	double closest = poly::closestPoints(s, size, ans);
-	return 0;
-
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	try {
+		string fileName = "C://Users//gaura//OneDrive//Documents//github//ComputationalGeometry//Basic//testFiles//cube.stl";
+		Solid s(fileName.c_str());
+		List<shared_ptr<Triangle3D>> * l = s.getTriangles();
+		//List<Triangle3D*>* dep = cg::surface::depthSort(tri, s.getNumberTriangles());;
+		Polygon p;
+		p.insert(Point(4, 5));
+		p.insert(Point(5, 4));
+		p.insert(Point(5, 2));
+		p.insert(Point(4, 2));
+		Point t(3, 3);
+		bool isIn = poly::pointInConvexPolygon(t, p);
+	}
+	catch (exception& e) {
+		std::cerr<<e.what();
+	}
+	_CrtDumpMemoryLeaks();
 }

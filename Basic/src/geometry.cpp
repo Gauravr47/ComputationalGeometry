@@ -138,8 +138,8 @@ void cg::Vertex::splice(Vertex* v) {
 
 Vertex* cg::Vertex::split(Vertex* b)
 {
-	Vertex* bp = b->ccw()->insert(new Vertex(b->point()));
-	insert(new Vertex(point()));
+	Vertex* bp = b->ccw()->insert(DBG_NEW Vertex(b->point()));
+	insert(DBG_NEW Vertex(point()));
 	splice(bp);
 	return bp;
 }
@@ -168,10 +168,10 @@ cg::Polygon::Polygon(Polygon& p)
 		_v = nullptr;
 	}
 	else {
-		_v = new Vertex(p.point());
+		_v = DBG_NEW Vertex(p.point());
 		for (int i = 1; i < _size; i++) {
 			p.advance(CLOCKWISE);
-			_v = _v->insert(new Vertex(p.point()));
+			_v = _v->insert(DBG_NEW Vertex(p.point()));
 		}
 		p.advance(CLOCKWISE);
 		_v = _v->cw();
@@ -196,10 +196,10 @@ cg::Polygon::~Polygon(void)
 Vertex* cg::Polygon::insert(Point& p)
 {
 	if (_size++ == 0) {
-		_v = new Vertex(p);
+		_v = DBG_NEW Vertex(p);
 	}
 	else {
-		_v = _v->insert(new Vertex(p));
+		_v = _v->insert(DBG_NEW Vertex(p));
 	}
 	return _v;
 }
@@ -260,7 +260,7 @@ Polygon* cg::Polygon::split(Vertex* b)
 {
 	Vertex* bp = _v->split(b);
 	resize();
-	return new Polygon(bp);
+	return DBG_NEW Polygon(bp);
 }
 
 /****************************************** Edge ****************************************/
@@ -440,10 +440,28 @@ cg::Triangle3D::Triangle3D(Point3D& v0, Point3D& v1, Point3D& v2, int _id)
 	_n = (1.0 / _n.length()) * _n;
 }
 
+cg::Triangle3D::Triangle3D(Point3D& v0, Point3D& v1, Point3D& v2, Point3D& n, int _id)
+{
+	id = _id;
+	mark = 0;
+	_v[0] = v0;
+	_v[1] = v1;
+	_v[2] = v2;
+	_n = n;
+	_boundingBox.org.x = min3(v0.x, v1.x, v2.x);
+	_boundingBox.org.y = min3(v0.y, v1.y, v2.y);
+	_boundingBox.org.z = min3(v0.z, v1.z, v2.z);
+	_boundingBox.dest.x = max3(v0.x, v1.x, v2.x);
+	_boundingBox.dest.y = max3(v0.y, v1.y, v2.y);
+	_boundingBox.dest.z = max3(v0.z, v1.z, v2.z);
+}
+
 cg::Triangle3D::Triangle3D(void)
 {
 }
 
+Triangle3D::~Triangle3D(void) {
+}
 Point3D cg::Triangle3D::operator[](int i)
 {
 	return _v[i];

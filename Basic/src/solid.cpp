@@ -1,3 +1,4 @@
+
 #include "solid.h"
 
 Solid::Solid():num_tri(0), tris(new List<Triangle3D*>),_boundingBox(Point3D(DBL_MAX, DBL_MAX, DBL_MAX),Point3D(DBL_MIN, DBL_MIN, DBL_MIN)) {};

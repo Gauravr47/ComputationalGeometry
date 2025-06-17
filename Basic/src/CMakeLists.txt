@@ -1,7 +1,7 @@
-add_executable(Basics main.cpp utilFuncs.cpp basic_data_structures.cpp geometry.cpp algorithms.cpp gadts.cpp solid.cpp)
+add_library(cg STATIC utilFuncs.cpp basic_data_structures.cpp geometry.cpp algorithms.cpp gadts.cpp solid.cpp)
 
-target_link_libraries(Basics)    # Link your executable with a library
+add_executable(Basics main.cpp)
 
-target_include_directories(Basics PUBLIC ${IntersectionsEigen_SOURCE_DIR}/include)
+target_include_directories(Basics PUBLIC ${BASIC_SOURCE_DIR}/include)
 
-
+target_link_libraries(Basics PRIVATE cg)    # Link your executable with a library

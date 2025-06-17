@@ -6,7 +6,7 @@
 #include "basic_data_structures.h"
 #include "gadts.h"
 #include "utilFuncs.h"
-
+#define CG_MAX_D 1e10
 using namespace cg;
 
 namespace cg {
@@ -20,6 +20,7 @@ namespace cg {
 		extern double monoCurrx;
 		extern int monoCurrType;
 
+		
 		//plane sweeps
 		List<EventPoint*>* intersectSegments(Edge[], int);
 		Dictionary<EventPoint*>& buildSchedule(Edge[], int);
@@ -67,7 +68,7 @@ namespace cg {
 		int edgeCmp(Edge*, Edge*);
 		int edgeCmp2(Edge*, Edge*);
 		int eventCmp(EventPoint*, EventPoint*);
-		bool findMate(Edge, Point[], int, Point&);
+		bool findMate(Edge, Point[], int, Point&); 
 		Polygon* triangle(Point&, Point&, Point&);
 		void updateFrontier(Dictionary<Edge*>&, Point&, Point&);
 		bool isConvex(Vertex*);
@@ -80,6 +81,7 @@ namespace cg {
 		Polygon* merge(Polygon*, Polygon*);
 		void bridge(Polygon*, Polygon*, Vertex*&, Vertex*&, int);
 		double closestPoints(Point[], int, Edge&);
+		double closestPoints(List<Point*>, Edge&);
 		double cPoints(Point* [], Point* [], int, Edge&);
 		void splitY(Point* [], int, Point*, Point* [], Point* []);
 		double checkStrip(Point* [], int, Point*, double, Edge&);
@@ -89,7 +91,7 @@ namespace cg {
 		bool pointInTriangle(Vertex*, Vertex*, Vertex*, Vertex*);
 	}
 	namespace surface {
-		List<Triangle3D*>* depthSort(Triangle3D* [], int);
+		List<Triangle3D*>* depthSort(Triangle3D* [], int, bool=true);
 		void shuffleList(List<Triangle3D*>*, Triangle3D*);
 		void refineList(List<Triangle3D*>*, Triangle3D*);
 	}

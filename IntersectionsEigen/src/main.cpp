@@ -2,6 +2,7 @@
 #include "solid.h"
 #include "contour.h"
 //#include "OpenGLFunctions.h"
+
 using namespace std;
 
 int main(int argc, char* argv[]) {

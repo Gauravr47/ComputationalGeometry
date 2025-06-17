@@ -1,7 +1,5 @@
 
-#define _CRTDBG_MAP_ALLOC
-#include <cstdlib>
-#include <crtdbg.h>
+
 #include "utilFuncs.h"
 #include "basic_data_structures.h"
 #include "algorithms.h"
@@ -45,21 +43,21 @@ int main() {
 		p.insert(Point(-3.0, 5.0));
 		p.insert(Point(1.0, 8.0));
 		p.insert(Point(3.0, 5.0));
-		List<Polygon*>* obs = new List<Polygon*>();
-		//obs.insert(&p);
+		List<shared_ptr<Polygon>>* obs = new List<shared_ptr<Polygon>>();
+		obs->insert(make_shared<Polygon>(p));
 		cg::Point start(0.0, 10.0);
 		cg::Point goal(10.0, 0.0);
 		Edge boundingBox(Point(-11, -11.0), Point(11.0, 11.0));
-		RRTStarTree test(start, goal, 2.0, 6.0, boundingBox,obs);
+		RRTStarTree test(start, goal, 0.5, 2.0, boundingBox,obs);
 		test.generatePath();
 		List< shared_ptr<RRTStarNode>>* path = test.getPath();
 		path->first();
 		while (!path->isHead()) {
 			cout << "\n" << path->val()->pnt.x << "  " << path->val()->pnt.y;
+			delete path->val();
 			path->next();
 		}
 		delete obs;
-		
 	}
 	catch (exception& e) {
 		std::cerr<<e.what();

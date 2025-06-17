@@ -46,7 +46,7 @@ shared_ptr<RRTStarNode> RRTStarTree::steer(shared_ptr<RRTStarNode> nearest, shar
 }
 
 List<shared_ptr<RRTStarNode>>* RRTStarTree::findNearNodes(shared_ptr<RRTStarNode> newNode) {
-	List<shared_ptr<RRTStarNode>>* neighbors = new List< shared_ptr<RRTStarNode>>;
+	List<shared_ptr<RRTStarNode>>* neighbors = DBG_NEW List< shared_ptr<RRTStarNode>>;
 	nodes->first();
 	while (!nodes->isHead()) {
 		double dist = distance(nodes->val(),newNode);
@@ -89,17 +89,17 @@ double RRTStarTree::distance(shared_ptr<RRTStarNode> a, shared_ptr<RRTStarNode> 
 	return (a->pnt - b->pnt).length();
 }
 
-RRTStarTree::RRTStarTree(cg::Point _start, cg::Point _goal, double _stepSize, double _searchRadius, cg::Edge boundingBox = Edge(Point(0,100), Point(100,100)), cg::List<cg::Polygon*>* obs = nullptr)
+RRTStarTree::RRTStarTree(cg::Point _start, cg::Point _goal, double _stepSize, double _searchRadius, cg::Edge boundingBox = Edge(Point(0,100), Point(100,100)), cg::List<shared_ptr<Polygon>>* obs = nullptr)
 	: stepSize(_stepSize), searchRadius(_searchRadius), closestDist(std::numeric_limits<double>::max()), mapBoundingBox(boundingBox){
 	start = make_shared<RRTStarNode>(_start);
 	goal = make_shared<RRTStarNode>(_goal);
 	closestToGoal = start;
-	nodes = new cg::List<shared_ptr<RRTStarNode>>();
-	path = new cg::List<shared_ptr<RRTStarNode>>();
+	nodes = DBG_NEW cg::List<shared_ptr<RRTStarNode>>();
+	path = DBG_NEW cg::List<shared_ptr<RRTStarNode>>();
 	nodes->insert(start);
 	iterations = 0;
 	if (obs == nullptr) {
-		obstacles = new List<Polygon*>();
+		obstacles = DBG_NEW List<shared_ptr<Polygon>>();
 	}
 	else {
 		obstacles = obs;
@@ -108,7 +108,8 @@ RRTStarTree::RRTStarTree(cg::Point _start, cg::Point _goal, double _stepSize, do
 
 RRTStarTree::~RRTStarTree() {
 	obstacles = nullptr;
-	
+	delete nodes;
+	delete path;
 }
 
 void RRTStarTree::run(int iterations) {
@@ -134,6 +135,7 @@ void RRTStarTree::run(int iterations) {
 
 			if (goalReached(newNode)) {
 				this->iterations = i;
+				delete neighbors;
 				return;
 			}
 			

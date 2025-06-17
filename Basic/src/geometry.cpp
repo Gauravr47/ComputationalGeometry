@@ -5,15 +5,15 @@ cg::Point::Point(double _x, double _y) : x(_x), y(_y) {
 };
 
 Point cg::operator+(Point& a, Point& b) {
-	return Point(a.x + b.x, a.y + b.y);
+	return Point(finite(a.x + b.x), finite(a.y + b.y));
 };
 
 Point cg::operator-(Point& a, Point& b) {
-	return Point(a.x - b.x, a.y - b.y);
+	return Point(finite(a.x - b.x), finite(a.y - b.y));
 };
 
 Point cg::operator*(double s, Point& a) {
-	return Point(s * a.x, s * a.y);
+	return Point(finite(s * a.x), finite(s * a.y));
 };
 
 double cg::Point::operator[](int i) {
@@ -21,11 +21,11 @@ double cg::Point::operator[](int i) {
 };
 
 int cg::operator==(Point& a, Point& b) {
-	return (a.x == b.x && a.y == b.y);
+	return ((a.x == b.x) &&( a.y == b.y));
 };
 
 int cg::operator!=(Point& a, Point& b) {
-	return abs(~(a == b));
+	return !(a == b);
 };
 
 int cg::operator<(Point& a, Point& b) {
@@ -82,7 +82,7 @@ double cg::Point::polarAngle(void) {
 };
 
 double cg::Point::length(void) {
-	return sqrt(x * x + y * y);
+	return finite(sqrt(x * x + y * y));
 }
 
 double cg::Point::distance(Edge& e)
@@ -98,9 +98,21 @@ double cg::Point::distance(Edge& e)
 }
 
 double cg::dotProduct(Point& a, Point& b) {
-	return a.x * b.x + a.y * b.y;
+	double ans = a.x * b.x + a.y * b.y;
+	return finite(ans);
 }
 
+double cg::finite(double d) {
+	if (isinf(d)) {
+		if (d < 0)
+			d = -DBL_MAX;
+		else
+			d = DBL_MAX;
+	}
+	if (_isnan(d))
+		d = DBL_MAX;
+	return d;
+}
 /****************************************** Vertex ****************************************/
 cg::Vertex::Vertex(double x, double y) :Point(x,y) {
 };

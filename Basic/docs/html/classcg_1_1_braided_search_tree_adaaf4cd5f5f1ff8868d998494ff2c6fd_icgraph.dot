@@ -1,0 +1,22 @@
+digraph "cg::BraidedSearchTree::val"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="cg::BraidedSearchTree::val",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cg::BraidedSearchTree\l::_remove",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_search_tree.html#a04064a25dac120f83b67bf21c6874838",tooltip=" "];
+  Node2 -> Node2 [id="edge2_Node000002_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node3 [id="edge3_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cg::BraidedSearchTree\l::remove",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_search_tree.html#afe778285c5fe1acc44c27f5cbd5f9567",tooltip=" "];
+  Node2 -> Node4 [id="edge4_Node000002_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="cg::BraidedSearchTree\l::removeMin",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_search_tree.html#a4507ac7e376e36ce19cf065a3c6109f2",tooltip=" "];
+  Node1 -> Node5 [id="edge5_Node000001_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="cg::BraidedSearchTree\l::find",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_search_tree.html#a24c23f5df862acb1519d3f6a9868a0e4",tooltip=" "];
+  Node1 -> Node6 [id="edge6_Node000001_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="cg::BraidedSearchTree\l::insert",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_search_tree.html#a81840081479749128568f24e6bddd75b",tooltip=" "];
+  Node1 -> Node3 [id="edge7_Node000001_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node4 [id="edge8_Node000001_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+}

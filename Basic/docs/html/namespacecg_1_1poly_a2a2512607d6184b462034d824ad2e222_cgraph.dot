@@ -1,0 +1,58 @@
+digraph "cg::poly::convexPolygonIntersect"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="cg::poly::convexPolygonIntersect",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cg::poly::advance",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#abe5e3bb0f36c202e3fbf434238d07c68",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cg::Polygon::advance",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#ad70f56c3905fbb6c4a417b4e6a715d67",tooltip=" "];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="cg::Polygon::insert",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#a8ccf84a6a49056973f1b46d460b914f8",tooltip=" "];
+  Node2 -> Node5 [id="edge4_Node000002_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="cg::Polygon::point",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#a756ba87fea40443c56c35326f5a03481",tooltip=" "];
+  Node1 -> Node6 [id="edge5_Node000001_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="cg::poly::aimsAt",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#ac8b84add5478a42def6a9c3d8eaa795b",tooltip=" "];
+  Node1 -> Node7 [id="edge6_Node000001_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="cg::Point::classify",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_point.html#aeb6ac0dd5fcdd6f3817b4b9cf50e0375",tooltip=" "];
+  Node7 -> Node8 [id="edge7_Node000007_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="cg::Point::length",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_point.html#af86bdbc41e34c5159f2e35c9de75299a",tooltip=" "];
+  Node7 -> Node9 [id="edge8_Node000007_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node9 [id="Node000009",label="cg::Point::Point",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_point.html#a97a9be699fb6bae85a47ebf75177ca67",tooltip=" "];
+  Node1 -> Node10 [id="edge9_Node000001_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node10 [id="Node000010",label="cg::poly::crossingPoint",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#ab2a94b7d80bd51cd429f3019acbfedf8",tooltip=" "];
+  Node10 -> Node11 [id="edge10_Node000010_Node000011",color="steelblue1",style="solid",tooltip=" "];
+  Node11 [id="Node000011",label="cg::Edge::intersect",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a38af578e3e6b71bfc35f7ede286691de",tooltip=" "];
+  Node11 -> Node12 [id="edge11_Node000011_Node000012",color="steelblue1",style="solid",tooltip=" "];
+  Node12 [id="Node000012",label="cg::dotProduct",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg.html#a6a74554070e23984ce38c17315c1f4eb",tooltip=" "];
+  Node11 -> Node13 [id="edge12_Node000011_Node000013",color="steelblue1",style="solid",tooltip=" "];
+  Node13 [id="Node000013",label="cg::Edge::Edge",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a0c6ba0b19e0d6547132e18eedf4aada6",tooltip=" "];
+  Node11 -> Node14 [id="edge13_Node000011_Node000014",color="steelblue1",style="solid",tooltip=" "];
+  Node14 [id="Node000014",label="cg::Edge::y",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a346a9e31b85947dea6d6a888f13b24c7",tooltip=" "];
+  Node14 -> Node15 [id="edge14_Node000014_Node000015",color="steelblue1",style="solid",tooltip=" "];
+  Node15 [id="Node000015",label="cg::Edge::slope",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#ab2c1207521107e1d96e60f6bcc83700c",tooltip=" "];
+  Node10 -> Node16 [id="edge15_Node000010_Node000016",color="steelblue1",style="solid",tooltip=" "];
+  Node16 [id="Node000016",label="cg::Edge::point",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#af0d335cdb818af74ebebf0d06efaad1c",tooltip=" "];
+  Node1 -> Node17 [id="edge16_Node000001_Node000017",color="steelblue1",style="solid",tooltip=" "];
+  Node17 [id="Node000017",label="cg::Polygon::edge",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#a319770679b1d4a588f7191e9cfbfece0",tooltip=" "];
+  Node17 -> Node5 [id="edge17_Node000017_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node4 [id="edge18_Node000001_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node5 [id="edge19_Node000001_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node18 [id="edge20_Node000001_Node000018",color="steelblue1",style="solid",tooltip=" "];
+  Node18 [id="Node000018",label="cg::poly::pointInConvexPolygon",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#af8aabbd0d6e31e499793980e09ddf8d8",tooltip=" "];
+  Node18 -> Node3 [id="edge21_Node000018_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node18 -> Node7 [id="edge22_Node000018_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node18 -> Node17 [id="edge23_Node000018_Node000017",color="steelblue1",style="solid",tooltip=" "];
+  Node18 -> Node5 [id="edge24_Node000018_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node18 -> Node19 [id="edge25_Node000018_Node000019",color="steelblue1",style="solid",tooltip=" "];
+  Node19 [id="Node000019",label="cg::Polygon::setV",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#a06ee68285e51121b0895893b4de22e60",tooltip=" "];
+  Node19 -> Node20 [id="edge26_Node000019_Node000020",color="steelblue1",style="solid",tooltip=" "];
+  Node20 [id="Node000020",label="cg::Polygon::v",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#a028050405839dfb6fd6adcd502e431f3",tooltip=" "];
+  Node18 -> Node21 [id="edge27_Node000018_Node000021",color="steelblue1",style="solid",tooltip=" "];
+  Node21 [id="Node000021",label="cg::Polygon::size",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#a8abf8b653a9442b86a87fb70af65d3f5",tooltip=" "];
+  Node18 -> Node20 [id="edge28_Node000018_Node000020",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node21 [id="edge29_Node000001_Node000021",color="steelblue1",style="solid",tooltip=" "];
+}

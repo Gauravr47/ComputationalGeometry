@@ -1,0 +1,27 @@
+digraph "cg::BraidedSearchTree::_remove"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="cg::BraidedSearchTree\l::_remove",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node1 [id="edge1_Node000001_Node000001",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node2 [id="edge2_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cg::BraidedNode::lchild",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_node.html#af4fd8d40df2336d4a7ae0c87c1d964f8",tooltip=" "];
+  Node2 -> Node3 [id="edge3_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cg::BraidedNode::BraidedNode",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_node.html#ac7737214b73529873c3fc878fab13207",tooltip=" "];
+  Node3 -> Node4 [id="edge4_Node000003_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="cg::TreeNode::TreeNode",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_tree_node.html#a08383ce733b659a46fbf31ad7ae53ec8",tooltip=" "];
+  Node1 -> Node5 [id="edge5_Node000001_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="cg::BraidedNode::next",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_node.html#abb6cfface7fc84a7e6a6254548a2f24d",tooltip=" "];
+  Node5 -> Node3 [id="edge6_Node000005_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node6 [id="edge7_Node000001_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="cg::BraidedNode::prev",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_node.html#a307473e679be6ee3bdace3163753641a",tooltip=" "];
+  Node6 -> Node3 [id="edge8_Node000006_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node7 [id="edge9_Node000001_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="cg::BraidedNode::rchild",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_node.html#a253922f9ed35966428f49f1b5ee06c5f",tooltip=" "];
+  Node7 -> Node3 [id="edge10_Node000007_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node8 [id="edge11_Node000001_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="cg::BraidedSearchTree::val",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_braided_search_tree.html#adaaf4cd5f5f1ff8868d998494ff2c6fd",tooltip=" "];
+}

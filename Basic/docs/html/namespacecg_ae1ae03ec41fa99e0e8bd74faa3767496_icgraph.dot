@@ -1,0 +1,15 @@
+digraph "cg::pointInRectangle"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="cg::pointInRectangle",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cg::Grid::rangeQuery",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_grid.html#a97c64b6d306acdc5fbefd7b76b16fc76",tooltip=" "];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cg::QuadTreeNode::rangeQuery",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_quad_tree_node.html#abc400052bb8cf58b2ed7c24285d5be19",tooltip=" "];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="cg::TwoDTreeNode::rangeQuery",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_two_d_tree_node.html#a898632f6d14bc234b8bbd17b3eaa38a6",tooltip=" "];
+}

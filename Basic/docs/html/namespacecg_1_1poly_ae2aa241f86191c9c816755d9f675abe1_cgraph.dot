@@ -1,0 +1,52 @@
+digraph "cg::poly::delaunayTriangulate"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="cg::poly::delaunayTriangulate",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cg::poly::edgeCmp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a748cdd2948602af6308d4fc1f4f4805c",tooltip=" "];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cg::poly::findMate",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a630d9e15bb97f4abbf87f3fa1621c537",tooltip=" "];
+  Node3 -> Node4 [id="edge3_Node000003_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="cg::Point::classify",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_point.html#aeb6ac0dd5fcdd6f3817b4b9cf50e0375",tooltip=" "];
+  Node4 -> Node5 [id="edge4_Node000004_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="cg::Point::length",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_point.html#af86bdbc41e34c5159f2e35c9de75299a",tooltip=" "];
+  Node4 -> Node6 [id="edge5_Node000004_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="cg::Point::Point",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_point.html#a97a9be699fb6bae85a47ebf75177ca67",tooltip=" "];
+  Node3 -> Node7 [id="edge6_Node000003_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="cg::Edge::intersect",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a38af578e3e6b71bfc35f7ede286691de",tooltip=" "];
+  Node7 -> Node8 [id="edge7_Node000007_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="cg::dotProduct",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg.html#a6a74554070e23984ce38c17315c1f4eb",tooltip=" "];
+  Node7 -> Node9 [id="edge8_Node000007_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node9 [id="Node000009",label="cg::Edge::Edge",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a0c6ba0b19e0d6547132e18eedf4aada6",tooltip=" "];
+  Node7 -> Node10 [id="edge9_Node000007_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node10 [id="Node000010",label="cg::Edge::y",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a346a9e31b85947dea6d6a888f13b24c7",tooltip=" "];
+  Node10 -> Node11 [id="edge10_Node000010_Node000011",color="steelblue1",style="solid",tooltip=" "];
+  Node11 [id="Node000011",label="cg::Edge::slope",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#ab2c1207521107e1d96e60f6bcc83700c",tooltip=" "];
+  Node3 -> Node12 [id="edge11_Node000003_Node000012",color="steelblue1",style="solid",tooltip=" "];
+  Node12 [id="Node000012",label="cg::Edge::rot",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a5aa002287f27d310e2e02bd34a312f93",tooltip=" "];
+  Node12 -> Node9 [id="edge12_Node000012_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node13 [id="edge13_Node000001_Node000013",color="steelblue1",style="solid",tooltip=" "];
+  Node13 [id="Node000013",label="cg::poly::hullEdge",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#aca171720e66ce7b9e141e8513ecec1b8",tooltip=" "];
+  Node13 -> Node4 [id="edge14_Node000013_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node13 -> Node14 [id="edge15_Node000013_Node000014",color="steelblue1",style="solid",tooltip=" "];
+  Node14 [id="Node000014",label="cg::swap",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg.html#ad9d3cab3ae0ca45664b64024aacf7243",tooltip=" "];
+  Node1 -> Node15 [id="edge16_Node000001_Node000015",color="steelblue1",style="solid",tooltip=" "];
+  Node15 [id="Node000015",label="cg::List::insert",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_list.html#a0314a62ee7d27daa2e1f0906d0d95349",tooltip=" "];
+  Node15 -> Node16 [id="edge17_Node000015_Node000016",color="steelblue1",style="solid",tooltip=" "];
+  Node16 [id="Node000016",label="cg::List::val",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_list.html#abb630c74effbfbb9f67e865eec72169b",tooltip=" "];
+  Node16 -> Node16 [id="edge18_Node000016_Node000016",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node17 [id="edge19_Node000001_Node000017",color="steelblue1",style="solid",tooltip=" "];
+  Node17 [id="Node000017",label="cg::poly::triangle",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#ac384ccfde0bb1d27827170e9fc3cc9c3",tooltip=" "];
+  Node17 -> Node18 [id="edge20_Node000017_Node000018",color="steelblue1",style="solid",tooltip=" "];
+  Node18 [id="Node000018",label="cg::Polygon::insert",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_polygon.html#a8ccf84a6a49056973f1b46d460b914f8",tooltip=" "];
+  Node1 -> Node19 [id="edge21_Node000001_Node000019",color="steelblue1",style="solid",tooltip=" "];
+  Node19 [id="Node000019",label="cg::poly::updateFrontier",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a74ec061aaafe9a0678cce23f9888fb9f",tooltip=" "];
+  Node19 -> Node20 [id="edge22_Node000019_Node000020",color="steelblue1",style="solid",tooltip=" "];
+  Node20 [id="Node000020",label="cg::Edge::flip",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcg_1_1_edge.html#a63b50c6ece4f91764fd912e8aaf2fe63",tooltip=" "];
+  Node20 -> Node9 [id="edge23_Node000020_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node20 -> Node12 [id="edge24_Node000020_Node000012",color="steelblue1",style="solid",tooltip=" "];
+}

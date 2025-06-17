@@ -1,0 +1,19 @@
+digraph "cg::poly::eventCmp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="cg::poly::eventCmp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cg::poly::buildSchedule",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#ab08e259f69ed61ad680a544fcc41f59b",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cg::poly::findContour",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a3794d6f3ebb71b15e30e629b11103db3",tooltip=" "];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="cg::poly::intersectSegments",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a1cb4962003c8e69d78f71d30cf53b49e",tooltip=" "];
+  Node2 -> Node5 [id="edge4_Node000002_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="cg::poly::semiregulaize",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a117aed378691a9a9d4a1c10dc4ecd87f",tooltip=" "];
+  Node5 -> Node6 [id="edge5_Node000005_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="cg::poly::regularize",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a7604cbdd72727e05263672997b7ca5bc",tooltip=" "];
+}

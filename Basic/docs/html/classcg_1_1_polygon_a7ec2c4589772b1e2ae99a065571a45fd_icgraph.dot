@@ -1,0 +1,22 @@
+digraph "cg::Polygon::cw"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="cg::Polygon::cw",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cg::poly::clipPolygonToEdge",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a5dddc462736980e4777290d5009cbb13",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cg::poly::clipPolygon",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#aec15186268d7f8ee47e76e0e6cb49df1",tooltip=" "];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="cg::poly::halfPlaneIntersect",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a09310b8f00447a1c3c558a3aac90f078",tooltip=" "];
+  Node4 -> Node4 [id="edge4_Node000004_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 -> Node5 [id="edge5_Node000004_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="cg::poly::kernel",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#ad6dd5511098625fbd39148b5e309d8c9",tooltip=" "];
+  Node4 -> Node6 [id="edge6_Node000004_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="cg::poly::voronoiRegion",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a32fb697ec2684e8b5076f30fce29ad53",tooltip=" "];
+  Node6 -> Node7 [id="edge7_Node000006_Node000007",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="cg::poly::voronoiDiagram",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$namespacecg_1_1poly.html#a2143c6248f4aaa2d6f0ee7addff812eb",tooltip=" "];
+}
